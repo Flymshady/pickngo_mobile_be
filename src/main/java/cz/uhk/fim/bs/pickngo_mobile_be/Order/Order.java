@@ -1,6 +1,6 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.Order;
 
-import cz.uhk.fim.bs.pickngo_web_be.User.User;
+import cz.uhk.fim.bs.pickngo_mobile_be.User.User;
 
 import javax.persistence.*;
 import java.util.Date;

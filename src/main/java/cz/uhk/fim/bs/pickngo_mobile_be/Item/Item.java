@@ -1,7 +1,7 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.Item;
 
-import cz.uhk.fim.bs.pickngo_web_be.Ingredient.Ingredient;
-import cz.uhk.fim.bs.pickngo_web_be.Order.Order;
+import cz.uhk.fim.bs.pickngo_mobile_be.Ingredient.Ingredient;
+import cz.uhk.fim.bs.pickngo_mobile_be.Order.Order;
 
 import javax.persistence.*;
 

@@ -1,7 +1,7 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.IngredientType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import cz.uhk.fim.bs.pickngo_web_be.Ingredient.Ingredient;
+import cz.uhk.fim.bs.pickngo_mobile_be.Ingredient.Ingredient;
 
 import javax.persistence.*;
 import java.util.List;

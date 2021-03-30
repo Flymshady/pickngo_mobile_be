@@ -1,6 +1,6 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.Ingredient;
 
-import cz.uhk.fim.bs.pickngo_web_be.IngredientType.IngredientType;
+import cz.uhk.fim.bs.pickngo_mobile_be.IngredientType.IngredientType;
 
 import javax.persistence.*;
 
