@@ -32,13 +32,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(Long userId) {
-        boolean exists = userRepository.existsById(userId);
-        if(!exists){
-            throw new IllegalStateException("user with id "+ userId + " doesnt exist");
-        }
-        userRepository.deleteById(userId);
-    }
     @Transactional
     public void updateUser(Long userId, String name, String email){
         User user = userRepository.findById(userId).orElseThrow(()-> new IllegalStateException("user with id "+ userId+ "doesnt exist"));

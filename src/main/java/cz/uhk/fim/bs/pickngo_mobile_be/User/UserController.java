@@ -28,10 +28,6 @@ public class UserController {
         userService.addNewUser(user);
     }
 
-    @DeleteMapping(path = "{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId){
-        userService.deleteUser(userId);
-    }
 
     @PutMapping(path = "{userId}")
     public void updateUser(
