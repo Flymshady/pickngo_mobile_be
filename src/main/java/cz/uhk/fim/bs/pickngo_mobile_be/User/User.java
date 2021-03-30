@@ -1,6 +1,10 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import cz.uhk.fim.bs.pickngo_mobile_be.Order.Order;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table
@@ -11,6 +15,8 @@ public class User {
     private Long id;
     private String name;
     private String email;
+    @JsonIgnore
+    private List<Order> orders;
 
     public User() {
     }
@@ -24,6 +30,12 @@ public class User {
     public User(String name, String email) {
         this.name = name;
         this.email = email;
+    }
+
+    public User(String name, String email, List<Order> orders) {
+        this.name = name;
+        this.email = email;
+        this.orders = orders;
     }
 
     public Long getId() {
@@ -56,6 +68,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", orders=" + orders +
                 '}';
     }
 }
