@@ -16,6 +16,7 @@ public class IngredientType {
     private Long id;
     private String name;
     @JsonIgnore
+    @OneToMany(mappedBy = "ingredientType")
     private List<Ingredient> ingredients;
 
     public IngredientType(String name, List<Ingredient> ingredients) {

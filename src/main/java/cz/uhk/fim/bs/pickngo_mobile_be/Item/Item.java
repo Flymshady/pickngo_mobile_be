@@ -1,7 +1,7 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.Item;
 
 import cz.uhk.fim.bs.pickngo_mobile_be.Ingredient.Ingredient;
-import cz.uhk.fim.bs.pickngo_mobile_be.Order.Order;
+import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder.BaguetteOrder;
 
 import javax.persistence.*;
 
@@ -14,19 +14,27 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_sequence")
     private Long id;
     private int amount;
-    private Order order;
+    private double price;
+    private String name;
+    @ManyToOne
+    private BaguetteOrder baguetteOrder;
+    @ManyToOne
     private Ingredient ingredient;
 
-    public Item(Long id, int amount, Order order, Ingredient ingredient) {
+    public Item(Long id, int amount, double price, String name, BaguetteOrder baguetteOrder, Ingredient ingredient) {
         this.id = id;
         this.amount = amount;
-        this.order = order;
+        this.price = price;
+        this.name=name;
+        this.baguetteOrder = baguetteOrder;
         this.ingredient = ingredient;
     }
 
-    public Item(int amount, Order order, Ingredient ingredient) {
+    public Item(int amount, double price, String name, BaguetteOrder baguetteOrder, Ingredient ingredient) {
         this.amount = amount;
-        this.order = order;
+        this.price = price;
+        this.name = name;
+        this.baguetteOrder = baguetteOrder;
         this.ingredient = ingredient;
     }
 
@@ -48,12 +56,12 @@ public class Item {
         this.amount = amount;
     }
 
-    public Order getOrder() {
-        return order;
+    public BaguetteOrder getBaguetteOrder() {
+        return baguetteOrder;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setBaguetteOrder(BaguetteOrder baguetteOrder) {
+        this.baguetteOrder = baguetteOrder;
     }
 
     public Ingredient getIngredient() {
@@ -64,12 +72,30 @@ public class Item {
         this.ingredient = ingredient;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
                 ", amount=" + amount +
-                ", order=" + order +
+                ", price=" + price +
+                ", name='" + name + '\'' +
+                ", baguetteOrder=" + baguetteOrder +
                 ", ingredient=" + ingredient +
                 '}';
     }
