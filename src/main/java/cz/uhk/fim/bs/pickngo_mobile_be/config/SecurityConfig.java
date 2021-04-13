@@ -15,12 +15,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure( HttpSecurity http ) throws Exception {
 
      //   http.csrf().disable();
-        http.authorizeRequests()
+      /*  http.authorizeRequests()
                 .antMatchers( "/oauth2/**", "/login/**" ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
-                .defaultSuccessUrl( "/home" );
+                .defaultSuccessUrl( "/home" );*/
 
     }
 }
