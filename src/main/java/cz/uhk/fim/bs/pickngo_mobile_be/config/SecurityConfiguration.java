@@ -1,4 +1,4 @@
-package cz.uhk.fim.bs.pickngo_mobile_be;
+package cz.uhk.fim.bs.pickngo_mobile_be.config;
 
 
 import org.springframework.context.annotation.Bean;
