@@ -16,17 +16,17 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
     public List<Customer> getCustomers() {
         return customerService.getCustomers();
     }
 
-    @PostMapping
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public void registerNewCustomer(@RequestBody Customer customer){
         customerService.addNewCustomer(customer);
     }
 
-    @PutMapping(path = "{customerId}")
+    @RequestMapping(value = "/update/{customerId}", method = RequestMethod.PUT)
     public void updateCustomer(
             @PathVariable("customerId") Long customerId,
             @RequestParam(required = false) String name,

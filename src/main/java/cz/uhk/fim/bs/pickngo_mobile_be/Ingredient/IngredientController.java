@@ -1,11 +1,10 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.Ingredient;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/ingredient")
@@ -18,8 +17,13 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
-    @GetMapping
-    public List<Ingredient> getIngredient() {
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public List<Ingredient> getIngredients() {
         return ingredientService.getIngredients();
+    }
+
+    @RequestMapping(value = "/detail/{ingredientName}", method = RequestMethod.GET)
+    public Optional<Ingredient> getIngredientByName(@PathVariable("ingredientName") String ingredientName) {
+        return ingredientService.getIngredientsByName(ingredientName);
     }
 }
