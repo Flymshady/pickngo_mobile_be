@@ -1,8 +1,11 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.config;
 
 
+import cz.uhk.fim.bs.pickngo_mobile_be.CustomUser.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,6 +22,12 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final CustomUserDetailsService userDetailsService;
+
+    public SecurityConfiguration(CustomUserDetailsService userDetailsService){
+        this.userDetailsService=userDetailsService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -45,5 +54,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 }
             }
         };
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth)  {
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(this.userDetailsService);
+        return daoAuthenticationProvider;
     }
 }
