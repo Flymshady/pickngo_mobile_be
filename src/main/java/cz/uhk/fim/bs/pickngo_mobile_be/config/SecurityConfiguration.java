@@ -1,9 +1,11 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.config;
 
 
-import cz.uhk.fim.bs.pickngo_mobile_be.CustomUser.CustomUserDetailsService;
+import cz.uhk.fim.bs.pickngo_mobile_be.CustomUser.CustomOidcUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.CachingUserDetailsService;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -23,23 +25,28 @@ import javax.servlet.http.HttpServletResponse;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final CustomUserDetailsService userDetailsService;
+    private final CustomOidcUserService customOidcUserService;
 
-    public SecurityConfiguration(CustomUserDetailsService userDetailsService){
-        this.userDetailsService=userDetailsService;
+    @Autowired
+    public SecurityConfiguration(CustomOidcUserService customOidcUserService){
+        this.customOidcUserService=customOidcUserService;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .oauth2Login().and()
-                .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
-                .authorizeRequests()
-                .antMatchers("/**/*.{js,html,css}").permitAll()
-                .antMatchers("/", "/api/user").permitAll()
-                .anyRequest().authenticated();
+
+      //  http
+      //          .oauth2Login()
+      //          .and()
+      //          .csrf()
+      //          .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+      //          .and()
+      //          .authorizeRequests()
+      //          .antMatchers("/**/*.{js,html,css}").permitAll()
+      //          .antMatchers("/", "/api/user").permitAll()
+      //          .anyRequest().authenticated();
+
+        http.authorizeRequests().anyRequest().authenticated().and().oauth2Login().userInfoEndpoint().oidcUserService(customOidcUserService);
 
     }
 
@@ -56,15 +63,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         };
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth)  {
-        auth.authenticationProvider(authenticationProvider());
-    }
-
-    @Bean
-    DaoAuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(this.userDetailsService);
-        return daoAuthenticationProvider;
-    }
 }
