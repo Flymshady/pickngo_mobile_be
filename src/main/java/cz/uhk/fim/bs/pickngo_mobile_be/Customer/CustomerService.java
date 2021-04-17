@@ -33,8 +33,16 @@ public class CustomerService {
     }
 
     @Transactional
-    public void updateCustomer(Long customerId, String name, String email){
+    public void updateCustomer(Long customerId, String name, String email, String emailShort){
         Customer customer = customerRepository.findById(customerId).orElseThrow(()-> new IllegalStateException("customer with id "+ customerId+ "doesnt exist"));
+
+        if(email.length() < emailShort.length()) {
+            String i;
+            i = emailShort;
+            emailShort = email;
+            email = i;
+        }
+
         if (name !=null && name.length() > 0 && !Objects.equals(customer.getName(), name)){
             customer.setName(name);
         }
@@ -45,5 +53,13 @@ public class CustomerService {
             }
             customer.setEmail(email);
         }
+        if (emailShort !=null && emailShort.length() > 0 && !Objects.equals(customer.getEmailShort(), emailShort)){
+            Optional<Customer> customerOptional = customerRepository.findCustomerByEmailShort(emailShort);
+            if (customerOptional.isPresent()){
+                throw new IllegalStateException("email taken");
+            }
+            customer.setEmailShort(emailShort);
+        }
+
     }
 }

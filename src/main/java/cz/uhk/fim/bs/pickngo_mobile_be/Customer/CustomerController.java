@@ -30,8 +30,9 @@ public class CustomerController {
     public void updateCustomer(
             @PathVariable("customerId") Long customerId,
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email) {
-        customerService.updateCustomer(customerId, name, email);
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String emailShort) {
+        customerService.updateCustomer(customerId, name, email, emailShort);
     }
 
 }

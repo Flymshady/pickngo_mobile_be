@@ -15,6 +15,7 @@ public class Customer {
     private Long id;
     private String name;
     private String email;
+    private String emailShort;
     @JsonIgnore
     @OneToMany(mappedBy = "customer")
     private List<BaguetteOrder> baguetteOrders;
@@ -22,20 +23,23 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Long id, String name, String email) {
+    public Customer(Long id, String name, String email, String emailShort) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.emailShort = emailShort;
     }
 
-    public Customer(String name, String email) {
+    public Customer(String name, String email, String emailShort) {
         this.name = name;
         this.email = email;
+        this.emailShort = emailShort;
     }
 
-    public Customer(String name, String email, List<BaguetteOrder> baguetteOrders) {
+    public Customer(String name, String email, String emailShort, List<BaguetteOrder> baguetteOrders) {
         this.name = name;
         this.email = email;
+        this.emailShort = emailShort;
         this.baguetteOrders = baguetteOrders;
     }
 
@@ -63,12 +67,29 @@ public class Customer {
         this.email = email;
     }
 
+    public String getEmailShort() {
+        return emailShort;
+    }
+
+    public void setEmailShort(String emailShort) {
+        this.emailShort = emailShort;
+    }
+
+    public List<BaguetteOrder> getBaguetteOrders() {
+        return baguetteOrders;
+    }
+
+    public void setBaguetteOrders(List<BaguetteOrder> baguetteOrders) {
+        this.baguetteOrders = baguetteOrders;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", emailShort='" + emailShort + '\'' +
                 ", baguetteOrders=" + baguetteOrders +
                 '}';
     }
