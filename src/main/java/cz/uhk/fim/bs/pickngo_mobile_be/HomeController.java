@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping(path="")
 public class HomeController {
@@ -19,15 +22,21 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
-    public Object detail(){
+    public Map<String, Object> detail(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
 
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
-        String email_short = authentication.getPrincipal().getAttribute("email"); //vraci kratsi1@uhk.cz
-        String full_name = authentication.getPrincipal().getAttribute("name"); //vraci jmeno.prijmeni@uhk.cz
+        String email_short = authentication.getPrincipal().getAttribute("preferred_username"); //vraci kratsi1@uhk.cz
+        String full_name = authentication.getPrincipal().getAttribute("name"); //vraci prijmeni jmeno
 
-        return "Hello there General "+ full_name + ", email: "+ email+", short email: "+ email_short;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("email", email);
+        map.put("email_short", email_short);
+        map.put("full_name", full_name);
+
+       //authentication.getPrincipal().getAttributes(); //obsahuje vse
+        return map;
     }
 
 
