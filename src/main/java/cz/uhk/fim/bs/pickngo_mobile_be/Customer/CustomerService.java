@@ -27,8 +27,8 @@ public class CustomerService {
 
 
     public void addNewCustomer(Customer customer) {
-        Optional<Customer> customerOptional = customerRepository.findCustomerByEmail(customer.getEmail());
-        if (customerOptional.isPresent()) {
+        Customer customerOptional = customerRepository.findCustomerByEmail(customer.getEmail());
+        if (customerOptional != null) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "email taken");
         }
@@ -52,16 +52,16 @@ public class CustomerService {
             customer.setName(name);
         }
         if (email !=null && email.length() > 0 && !Objects.equals(customer.getEmail(), email)){
-            Optional<Customer> customerOptional = customerRepository.findCustomerByEmail(email);
-            if (customerOptional.isPresent()){
+            Customer customerOptional = customerRepository.findCustomerByEmail(email);
+            if (customerOptional != null){
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "email taken");
             }
             customer.setEmail(email);
         }
         if (emailShort !=null && emailShort.length() > 0 && !Objects.equals(customer.getEmailShort(), emailShort)){
-            Optional<Customer> customerOptional = customerRepository.findCustomerByEmailShort(emailShort);
-            if (customerOptional.isPresent()){
+            Customer customerOptional = customerRepository.findCustomerByEmailShort(emailShort);
+            if (customerOptional != null){
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "email taken");
             }

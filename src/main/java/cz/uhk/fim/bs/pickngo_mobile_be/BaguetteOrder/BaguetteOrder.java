@@ -20,7 +20,7 @@ public class BaguetteOrder {
     private Customer customer;
     private double price;
     private Date date;
-    private int state; //0-čeká, 1-přijatá, 2-dokončena, 3-zrušena
+    private int state; //0-vytvářená 1-čeká, 2-přijatá, 3-dokončena, 4-zrušena
     @JsonIgnore
     @OneToMany(mappedBy = "baguetteOrder")
     private List<Item> items;
