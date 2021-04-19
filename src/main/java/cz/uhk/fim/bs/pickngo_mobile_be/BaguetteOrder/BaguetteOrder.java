@@ -21,23 +21,26 @@ public class BaguetteOrder {
     private double price;
     private Date date;
     private int state; //0-vytvářená 1-čeká, 2-přijatá, 3-dokončena, 4-zrušena
+    private String note;
     @JsonIgnore
     @OneToMany(mappedBy = "baguetteOrder")
     private List<Item> items;
 
-    public BaguetteOrder(Customer customer, double price, Date date, int state, List<Item> items) {
+    public BaguetteOrder(Customer customer, double price, Date date, int state, String note, List<Item> items) {
         this.customer = customer;
         this.price = price;
         this.date = date;
         this.state = state;
+        this.note = note;
         this.items = items;
     }
 
-    public BaguetteOrder(Customer customer, double price, Date date, int state) {
+    public BaguetteOrder(Customer customer, double price, Date date, int state, String note) {
         this.customer = customer;
         this.price = price;
         this.date = date;
         this.state = state;
+        this.note = note;
     }
 
     public BaguetteOrder(){}
@@ -86,6 +89,14 @@ public class BaguetteOrder {
         return items;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     @Override
     public String toString() {
         return "BaguetteOrder{" +
@@ -94,6 +105,7 @@ public class BaguetteOrder {
                 ", price=" + price +
                 ", date=" + date +
                 ", state=" + state +
+                ", note='" + note + '\'' +
                 ", items=" + items +
                 '}';
     }

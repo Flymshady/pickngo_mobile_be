@@ -26,17 +26,17 @@ public class CustomerService {
     }
 
 
-    public void addNewCustomer(Customer customer) {
+    public Customer addNewCustomer(Customer customer) {
         Customer customerOptional = customerRepository.findCustomerByEmail(customer.getEmail());
         if (customerOptional != null) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "email taken");
         }
-        customerRepository.save(customer);
+        return customerRepository.save(customer);
     }
 
     @Transactional
-    public void updateCustomer(Long customerId, String name, String email, String emailShort){
+    public Customer updateCustomer(Long customerId, String name, String email, String emailShort){
         Customer customer = customerRepository.findById(customerId).orElseThrow(()->
                 new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "customer with id "+ customerId+ "doesnt exist"));
@@ -67,6 +67,9 @@ public class CustomerService {
             }
             customer.setEmailShort(emailShort);
         }
+
+        return customerRepository.save(customer);
+
 
     }
 }

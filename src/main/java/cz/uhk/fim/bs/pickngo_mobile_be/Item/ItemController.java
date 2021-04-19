@@ -40,4 +40,25 @@ public class ItemController {
 
         itemService.addNewItem(item, email);
     }
+
+    @RequestMapping(value = "/update/{itemId}", method = RequestMethod.POST)
+    public void updateItem(@PathVariable("itemId") Long itemId,
+                           @RequestParam(required = false) int amount){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
+
+        String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
+
+        itemService.updateItem(itemId, email, amount);
+    }
+
+    @RequestMapping(value = "/remove/{itemId}", method = RequestMethod.POST)
+    public void removeItem(@PathVariable("itemId") Long itemId){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
+
+        String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
+
+        itemService.removeItem(itemId, email);
+    }
 }
