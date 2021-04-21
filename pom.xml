@@ -93,16 +93,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <archiveClasses>false</archiveClasses>
-                    <webXml>${basedir}/src/main/webapp/WEB-INF/web.xml</webXml>
-
-                    <webappDirectory>${project.build.directory}/mywebapp</webappDirectory>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
