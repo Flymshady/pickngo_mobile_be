@@ -41,7 +41,7 @@ public class HomeController {
 
     @RequestMapping(value = "/git", method = RequestMethod.GET)
     public String homeGit(){
-        return "čau tohle je zkouška automatického nasazení z gitu";
+        return "čau tohle je zkouška automatického nasazení z gitu, funguj PogO";
     }
 
 
