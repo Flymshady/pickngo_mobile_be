@@ -39,5 +39,10 @@ public class HomeController {
         return map;
     }
 
+    @RequestMapping(value = "/git", method = RequestMethod.GET)
+    public String homeGit(){
+        return "čau tohle je zkouška automatického nasazení z gitu";
+    }
+
 
 }
