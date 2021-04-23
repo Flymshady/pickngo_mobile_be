@@ -1,5 +1,7 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder;
 
+import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItem;
+import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItemRepository;
 import cz.uhk.fim.bs.pickngo_mobile_be.Customer.Customer;
 import cz.uhk.fim.bs.pickngo_mobile_be.Customer.CustomerRepository;
 import cz.uhk.fim.bs.pickngo_mobile_be.Item.Item;
@@ -18,12 +20,14 @@ public class BaguetteOrderService {
 
     private final BaguetteOrderRepository baguetteOrderRepository;
     private final CustomerRepository customerRepository;
+    private final BaguetteItemRepository baguetteItemRepository;
     private final ItemRepository itemRepository;
 
     @Autowired
-    public BaguetteOrderService(BaguetteOrderRepository baguetteOrderRepository, CustomerRepository customerRepository, ItemRepository itemRepository) {
+    public BaguetteOrderService(BaguetteOrderRepository baguetteOrderRepository, CustomerRepository customerRepository, BaguetteItemRepository baguetteItemRepository, ItemRepository itemRepository) {
         this.baguetteOrderRepository = baguetteOrderRepository;
         this.customerRepository = customerRepository;
+        this.baguetteItemRepository =baguetteItemRepository;
         this.itemRepository = itemRepository;
     }
 
@@ -75,11 +79,18 @@ public class BaguetteOrderService {
                     HttpStatus.BAD_REQUEST, "Objednávka nenelazena");
         }
         if (baguetteOrder.getState()==0){
-            List<Item> items = itemRepository.findAllByBaguetteOrder_Id(baguetteOrderId);
-            if(!items.isEmpty()) {
-                for (Item item : items) {
-                    itemRepository.delete(item);
+            List<BaguetteItem> baguetteItemList = baguetteItemRepository.findAllByBaguetteOrder_Id(baguetteOrderId);
+            if(!baguetteItemList.isEmpty()){
+                for(BaguetteItem baguetteItem : baguetteItemList){
+                    List<Item> items = itemRepository.findAllByBaguetteItem_Id(baguetteItem.getId());
+                    if(!items.isEmpty()) {
+                        for (Item item : items) {
+                            itemRepository.delete(item);
+                        }
+                    }
+                    baguetteItemRepository.delete(baguetteItem);
                 }
+
             }
             baguetteOrderRepository.delete(baguetteOrder);
         }else {
@@ -133,5 +144,23 @@ public class BaguetteOrderService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávku nelze upravit");
         }
+    }
+
+    public BaguetteOrder createBaguetteOrder(String email) {
+        Customer customer = customerRepository.findCustomerByEmail(email);
+        if (customer == null){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
+        }
+        List<BaguetteOrder> baguetteOrderList = baguetteOrderRepository.findAllByStateAndCustomer_Email(0, email);
+        if (!baguetteOrderList.isEmpty()){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "nejprve dokončete objednávku");
+        }
+
+        BaguetteOrder baguetteOrder =  new BaguetteOrder();
+        baguetteOrder.setState(0);
+        baguetteOrder.setCustomer(customer);
+        return baguetteOrderRepository.save(baguetteOrder);
     }
 }

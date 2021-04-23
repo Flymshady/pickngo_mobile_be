@@ -1,6 +1,6 @@
-package cz.uhk.fim.bs.pickngo_mobile_be.Item;
+package cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem;
 
-import cz.uhk.fim.bs.pickngo_mobile_be.Customer.CustomerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,57 +8,48 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
+@CrossOrigin
 @RestController
-@RequestMapping(path="/item")
-public class ItemController {
+@RequestMapping(path="/baguetteItem")
+public class BaguetteItemController {
 
-    private final CustomerService customerService;
-    private final ItemService itemService;
+    private final BaguetteItemService baguetteItemService;
 
     @Autowired
-    public ItemController(CustomerService customerService, ItemService itemService) {
-        this.customerService = customerService;
-        this.itemService = itemService;
+    public BaguetteItemController(BaguetteItemService baguetteItemService) {
+        this.baguetteItemService = baguetteItemService;
     }
-
-    @RequestMapping(value = "/{baguetteItemId}/all", method = RequestMethod.GET)
-    public List<Item> getItems(@PathVariable("baguetteItemId") Long baguetteItemId) {
+    @RequestMapping(value = "/all/{baguetteOrderId}", method = RequestMethod.GET)
+    public List<BaguetteItem> getBaguetteItems(@PathVariable("baguetteOrderId") Long baguetteOrderId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
-
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
-        return itemService.getItems(baguetteItemId, email);
+        return baguetteItemService.getBaguetteItems(baguetteOrderId, email);
     }
 
-    @RequestMapping(value = "/create/{baguetteItemId}", method = RequestMethod.POST)
-    public void createNewItem(@PathVariable("baguetteItemId") Long baguetteItemId, @RequestBody Item item){
+    @RequestMapping(value = "/detail/{baguetteItemId}", method = RequestMethod.GET)
+    public BaguetteItem getBaguetteItem(@PathVariable("baguetteItemId") Long baguetteItemId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
-
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
-
-        itemService.addNewItem(item, email, baguetteItemId);
+        return baguetteItemService.getBaguetteItem(baguetteItemId, email);
     }
 
-    @RequestMapping(value = "/update/{itemId}", method = RequestMethod.POST)
-    public void updateItem(@PathVariable("itemId") Long itemId,
-                           @RequestParam(required = false) int amount){
+    @RequestMapping(value = "/remove/{baguetteItemId}", method = RequestMethod.DELETE)
+    public void removeBaguetteItem(@PathVariable("baguetteItemId") Long baguetteItemId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
-
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
-
-        itemService.updateItem(itemId, email, amount);
+        baguetteItemService.removeBaguetteItem(baguetteItemId, email);
     }
-
-    @RequestMapping(value = "/remove/{itemId}", method = RequestMethod.POST)
-    public void removeItem(@PathVariable("itemId") Long itemId){
+    @RequestMapping(value = "/create/{baguetteOrderId}", method = RequestMethod.DELETE)
+    public void createBaguetteItem(@PathVariable("baguetteOrderId") Long baguetteOrderId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
-
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
-
-        itemService.removeItem(itemId, email);
+        baguetteItemService.createBaguetteItem(baguetteOrderId, email);
     }
+
 }

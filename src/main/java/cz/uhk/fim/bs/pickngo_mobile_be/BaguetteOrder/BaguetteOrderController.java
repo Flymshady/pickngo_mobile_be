@@ -43,6 +43,14 @@ public class BaguetteOrderController {
         return baguetteOrderService.getBaguetteOrderId(baguetteOrderId, email);
     }
 
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public void createBaguetteOrder(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
+        String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.c
+        baguetteOrderService.createBaguetteOrder(email);
+    }
+
     @RequestMapping(value = "/remove/{baguetteOrderId}", method = RequestMethod.DELETE)
     public void removeBaguetteOrder(@PathVariable("baguetteOrderId") Long baguetteOrderId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -66,8 +74,6 @@ public class BaguetteOrderController {
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
         baguetteOrderService.confirmBaguetteOrder(baguetteOrderId, email);
     }
-
-
 
 
 }

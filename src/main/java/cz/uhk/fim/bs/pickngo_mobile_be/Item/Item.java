@@ -1,5 +1,6 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.Item;
 
+import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItem;
 import cz.uhk.fim.bs.pickngo_mobile_be.Ingredient.Ingredient;
 import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder.BaguetteOrder;
 
@@ -17,24 +18,24 @@ public class Item {
     private double price;
     private String name;
     @ManyToOne
-    private BaguetteOrder baguetteOrder;
+    private BaguetteItem baguetteItem;
     @ManyToOne
     private Ingredient ingredient;
 
-    public Item(Long id, int amount, double price, String name, BaguetteOrder baguetteOrder, Ingredient ingredient) {
+    public Item(Long id, int amount, double price, String name, BaguetteItem baguetteItem, Ingredient ingredient) {
         this.id = id;
         this.amount = amount;
         this.price = price;
         this.name=name;
-        this.baguetteOrder = baguetteOrder;
+        this.baguetteItem = baguetteItem;
         this.ingredient = ingredient;
     }
 
-    public Item(int amount, double price, String name, BaguetteOrder baguetteOrder, Ingredient ingredient) {
+    public Item(int amount, double price, String name, BaguetteItem baguetteItem, Ingredient ingredient) {
         this.amount = amount;
         this.price = price;
         this.name = name;
-        this.baguetteOrder = baguetteOrder;
+        this.baguetteItem = baguetteItem;
         this.ingredient = ingredient;
     }
 
@@ -56,12 +57,12 @@ public class Item {
         this.amount = amount;
     }
 
-    public BaguetteOrder getBaguetteOrder() {
-        return baguetteOrder;
+    public BaguetteItem getBaguetteItem() {
+        return baguetteItem;
     }
 
-    public void setBaguetteOrder(BaguetteOrder baguetteOrder) {
-        this.baguetteOrder = baguetteOrder;
+    public void setBaguetteItem(BaguetteItem baguetteItem) {
+        this.baguetteItem = baguetteItem;
     }
 
     public Ingredient getIngredient() {
@@ -95,7 +96,7 @@ public class Item {
                 ", amount=" + amount +
                 ", price=" + price +
                 ", name='" + name + '\'' +
-                ", baguetteOrder=" + baguetteOrder +
+                ", baguetteItem=" + baguetteItem +
                 ", ingredient=" + ingredient +
                 '}';
     }

@@ -1,5 +1,6 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder;
 
+import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,5 @@ public interface BaguetteOrderRepository extends JpaRepository<BaguetteOrder, Lo
     List<BaguetteOrder> findBaguetteOrderByCustomer_Email(String email);
     List<BaguetteOrder> findAllByStateAndCustomer_Email(int state, String email);
     BaguetteOrder findBaguetteOrderByIdAndCustomer_Email(Long baguetteOrderId, String email);
+    BaguetteOrder findBaguetteOrderByBaguetteItemsContaining(BaguetteItem baguetteItem);
 }
