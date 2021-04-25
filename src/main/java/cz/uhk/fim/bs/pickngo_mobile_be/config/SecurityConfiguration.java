@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       //          .antMatchers("/", "/api/user").permitAll()
       //          .anyRequest().authenticated();
 
-        http.authorizeRequests().anyRequest().authenticated().and().oauth2Login().userInfoEndpoint().oidcUserService(customOidcUserService);
+        http.authorizeRequests().anyRequest().authenticated().and().oauth2Login().defaultSuccessUrl("/afterLogin").userInfoEndpoint().oidcUserService(customOidcUserService);
 
     }
 

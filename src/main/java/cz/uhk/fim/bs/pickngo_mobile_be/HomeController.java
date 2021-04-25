@@ -21,6 +21,15 @@ public class HomeController {
         return "čau";
     }
 
+    @RequestMapping(value = "/afterLogin", method = RequestMethod.GET)
+    public String afterLogin(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
+        String full_name = authentication.getPrincipal().getAttribute("name"); //vraci prijmeni jmeno
+
+        return "Uživatel "+full_name+" úspěšně přihlášen." ;
+    }
+
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     public Map<String, Object> detail(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
