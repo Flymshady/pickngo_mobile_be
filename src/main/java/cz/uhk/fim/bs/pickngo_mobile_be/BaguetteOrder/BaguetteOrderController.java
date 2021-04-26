@@ -45,11 +45,11 @@ public class BaguetteOrderController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public void createBaguetteOrder(){
+    public BaguetteOrder createBaguetteOrder(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.c
-        baguetteOrderService.createBaguetteOrder(email);
+        return baguetteOrderService.createBaguetteOrder(email);
     }
 
     @RequestMapping(value = "/remove/{baguetteOrderId}", method = RequestMethod.DELETE)
