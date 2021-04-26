@@ -9,4 +9,5 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findAllByBaguetteItem_Id(Long baguetteItemId );
+    List<Item> findByIngredient_IngredientType_NameAndBaguetteItem_Id(String ingredientTypeName, Long baguetteItemId);
 }

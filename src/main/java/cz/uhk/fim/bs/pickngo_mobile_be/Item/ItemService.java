@@ -72,6 +72,13 @@ public class ItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, objednávku nelze měnit");
         }
+        if(item.getIngredient().getIngredientType().getName().equals("Pečivo")) {
+            List<Item> pecivoList = itemRepository.findByIngredient_IngredientType_NameAndBaguetteItem_Id("Pečivo", baguetteItemId);
+            if (!pecivoList.isEmpty()) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Nelze přidat více pečiva do jedné bagety :)");
+            }
+        }
 
         baguetteItem.setPrice(baguetteItem.getPrice() + item.getPrice()*item.getAmount());
         baguetteItemRepository.save(baguetteItem);
@@ -108,7 +115,10 @@ public class ItemService {
         if(amount<=0){
             removeItem(itemId, email);
         }else {
-
+            if(item.getIngredient().getIngredientType().getName().equals("Pečivo")){
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Nelze přidat více pečiva do jedné bagety :)");
+            }
             int amountPrev = item.getAmount();
             double itemPrice = item.getPrice();
 

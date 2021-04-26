@@ -44,7 +44,7 @@ public class BaguetteItemController {
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
         baguetteItemService.removeBaguetteItem(baguetteItemId, email);
     }
-    @RequestMapping(value = "/create/{baguetteOrderId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/create/{baguetteOrderId}", method = RequestMethod.POST)
     public void createBaguetteItem(@PathVariable("baguetteOrderId") Long baguetteOrderId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;

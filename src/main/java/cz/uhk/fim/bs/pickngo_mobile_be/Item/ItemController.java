@@ -41,7 +41,7 @@ public class ItemController {
         itemService.addNewItem(item, email, baguetteItemId);
     }
 
-    @RequestMapping(value = "/update/{itemId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/update/{itemId}", method = RequestMethod.PUT)
     public void updateItem(@PathVariable("itemId") Long itemId,
                            @RequestParam(required = false) int amount){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -52,7 +52,7 @@ public class ItemController {
         itemService.updateItem(itemId, email, amount);
     }
 
-    @RequestMapping(value = "/remove/{itemId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/remove/{itemId}", method = RequestMethod.DELETE)
     public void removeItem(@PathVariable("itemId") Long itemId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
