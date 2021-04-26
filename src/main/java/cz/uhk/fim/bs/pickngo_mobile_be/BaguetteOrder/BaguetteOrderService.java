@@ -163,4 +163,15 @@ public class BaguetteOrderService {
         baguetteOrder.setCustomer(customer);
         return baguetteOrderRepository.save(baguetteOrder);
     }
+
+    public Optional<BaguetteOrder> getBaguetteOrderActual(String email) {
+        Customer customer = customerRepository.findCustomerByEmail(email);
+        if (customer == null){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
+        }
+        Optional<BaguetteOrder> baguetteOrderOptional = Optional.ofNullable(baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email));
+        return baguetteOrderOptional;
+
+    }
 }

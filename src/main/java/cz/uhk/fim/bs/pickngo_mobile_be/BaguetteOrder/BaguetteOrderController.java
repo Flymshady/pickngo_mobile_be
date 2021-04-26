@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -42,6 +43,14 @@ public class BaguetteOrderController {
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
         return baguetteOrderService.getBaguetteOrderId(baguetteOrderId, email);
+    }
+
+    @RequestMapping(value = "/actual", method = RequestMethod.GET)
+    public Optional<BaguetteOrder> getBaguetteOrderActual(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
+        String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
+        return baguetteOrderService.getBaguetteOrderActual(email);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
