@@ -161,7 +161,8 @@ public class BaguetteOrderService {
         BaguetteOrder baguetteOrder =  new BaguetteOrder();
         baguetteOrder.setState(0);
         baguetteOrder.setCustomer(customer);
-        return baguetteOrderRepository.save(baguetteOrder);
+        baguetteOrderRepository.save(baguetteOrder);
+        return baguetteOrder;
     }
 
     public Optional<BaguetteOrder> getBaguetteOrderActual(String email) {

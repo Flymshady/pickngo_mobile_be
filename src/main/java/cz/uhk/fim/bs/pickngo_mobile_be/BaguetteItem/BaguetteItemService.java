@@ -132,8 +132,9 @@ public class BaguetteItemService {
 
         baguetteOrder.getBaguetteItems().add(baguetteItem);
         baguetteOrderRepository.save(baguetteOrder);
-        return baguetteItemRepository.save(baguetteItem);
+        baguetteItemRepository.save(baguetteItem);
 
+        return baguetteItem;
 
     }
 }
