@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,7 +125,7 @@ public class BaguetteOrderService {
     }
 
     @Transactional
-    public void confirmBaguetteOrder(Long baguetteOrderId, String email) {
+    public void confirmBaguetteOrder(Long baguetteOrderId, Date date, String email) {
         Customer customer = customerRepository.findCustomerByEmail(email);
         if (customer == null){
             throw new ResponseStatusException(
@@ -137,6 +138,7 @@ public class BaguetteOrderService {
         }
         if (baguetteOrder.getState()==0){
 
+            baguetteOrder.setDate(date);
             baguetteOrder.setState(1);
             baguetteOrderRepository.save(baguetteOrder);
 

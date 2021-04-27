@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,11 +79,11 @@ public class BaguetteOrderController {
     }
 
     @RequestMapping(value = "/confirm/{baguetteOrderId}", method = RequestMethod.PUT)
-    public void confirmBaguetteOrder(@PathVariable("baguetteOrderId") Long baguetteOrderId) {
+    public void confirmBaguetteOrder(@PathVariable("baguetteOrderId") Long baguetteOrderId, @RequestParam Date date) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
-        baguetteOrderService.confirmBaguetteOrder(baguetteOrderId, email);
+        baguetteOrderService.confirmBaguetteOrder(baguetteOrderId, date, email);
     }
 
 
