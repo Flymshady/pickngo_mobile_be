@@ -110,6 +110,7 @@ public class BaguetteItemService {
 
     }
 
+    @Transactional
     public BaguetteItem createBaguetteItem(Long baguetteOrderId, String email) {
         Customer customer = customerRepository.findCustomerByEmail(email);
         if (customer == null){
@@ -178,6 +179,7 @@ public class BaguetteItemService {
         baguetteItem.setPrice(price);
         baguetteItem.setItems(items);
         baguetteOrder.getBaguetteItems().add(baguetteItem);
+        baguetteOrder.setPrice(baguetteOrder.getPrice()+price);
         baguetteOrderRepository.save(baguetteOrder);
         baguetteItemRepository.save(baguetteItem);
         return baguetteItem;
