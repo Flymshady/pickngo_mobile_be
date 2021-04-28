@@ -18,27 +18,46 @@ public class BaguetteItem {
     private double price;
     @OneToMany(mappedBy = "baguetteItem")
     private List<Item> items;
+    private boolean offer;
 
-    public BaguetteItem(BaguetteOrder baguetteOrder, double price, List<Item> items) {
+    public BaguetteItem(BaguetteOrder baguetteOrder, double price, List<Item> items, boolean offer) {
         this.baguetteOrder = baguetteOrder;
         this.price = price;
         this.items = items;
+        this.offer = offer;
     }
 
-    public BaguetteItem(Long id, BaguetteOrder baguetteOrder, double price, List<Item> items) {
+    public BaguetteItem(Long id, BaguetteOrder baguetteOrder, double price, List<Item> items, boolean offer) {
         this.id = id;
         this.baguetteOrder = baguetteOrder;
         this.price = price;
         this.items = items;
+        this.offer = offer;
     }
 
-    public BaguetteItem(BaguetteOrder baguetteOrder, double price) {
+    public BaguetteItem(BaguetteOrder baguetteOrder, double price, boolean offer) {
         this.baguetteOrder = baguetteOrder;
         this.price = price;
+        this.offer = offer;
+    }
+
+    public BaguetteItem(Long id, BaguetteOrder baguetteOrder, double price, boolean offer) {
+        this.id = id;
+        this.baguetteOrder = baguetteOrder;
+        this.price = price;
+        this.offer = offer;
     }
 
     public BaguetteItem(){
 
+    }
+
+    public boolean isOffer() {
+        return offer;
+    }
+
+    public void setOffer(boolean offer) {
+        this.offer = offer;
     }
 
     public Long getId() {
@@ -80,6 +99,7 @@ public class BaguetteItem {
                 ", baguetteOrder=" + baguetteOrder +
                 ", price=" + price +
                 ", items=" + items +
+                ", offer=" + offer +
                 '}';
     }
 }

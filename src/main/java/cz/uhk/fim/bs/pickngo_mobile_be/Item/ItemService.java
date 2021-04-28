@@ -64,6 +64,10 @@ public class ItemService {
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
         }
         BaguetteItem baguetteItem = baguetteItemRepository.getOne(baguetteItemId);
+        if(baguetteItem.isOffer()){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Specialní nabídku nelze měnit");
+        }
         BaguetteOrder baguetteOrder = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteItemOpt.get().getBaguetteOrder().getId(), email);
         if (baguetteOrder == null){
             throw new ResponseStatusException(
@@ -127,6 +131,11 @@ public class ItemService {
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
             }
+            if(baguetteItemOpt.get().isOffer()){
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Specialní nabídku nelze měnit");
+            }
+
             BaguetteItem baguetteItem = baguetteItemRepository.getOne(baguetteItemOpt.get().getId());
             baguetteItem.setPrice(baguetteItem.getPrice() - amountPrev*itemPrice+itemPrice*amount);
             baguetteItemRepository.save(baguetteItem);
@@ -168,6 +177,10 @@ public class ItemService {
         if(baguetteItem == null){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
+        }
+        if(baguetteItem.isOffer()){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Specialní nabídku nelze měnit");
         }
 
         double price = item.getPrice() * item.getAmount();

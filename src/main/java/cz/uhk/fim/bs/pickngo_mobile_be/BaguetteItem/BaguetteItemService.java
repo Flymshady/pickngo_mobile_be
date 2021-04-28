@@ -177,6 +177,7 @@ public class BaguetteItemService {
         double price = specialOfferOptional.get().getPrice();
         BaguetteItem baguetteItem = new BaguetteItem();
         baguetteItem.setPrice(price);
+        baguetteItem.setOffer(true);
         baguetteItem.setItems(items);
         baguetteOrder.getBaguetteItems().add(baguetteItem);
         baguetteOrder.setPrice(baguetteOrder.getPrice()+price);
