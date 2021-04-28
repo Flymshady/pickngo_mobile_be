@@ -3,6 +3,7 @@ package cz.uhk.fim.bs.pickngo_mobile_be.Item;
 import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItem;
 import cz.uhk.fim.bs.pickngo_mobile_be.Ingredient.Ingredient;
 import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder.BaguetteOrder;
+import cz.uhk.fim.bs.pickngo_mobile_be.SpecialOffer.SpecialOffer;
 
 import javax.persistence.*;
 
@@ -20,14 +21,26 @@ public class Item {
     @ManyToOne
     private BaguetteItem baguetteItem;
     @ManyToOne
+    private SpecialOffer specialOffer;
+    @ManyToOne
     private Ingredient ingredient;
 
-    public Item(Long id, int amount, double price, String name, BaguetteItem baguetteItem, Ingredient ingredient) {
+    public Item(Long id, int amount, double price, String name, BaguetteItem baguetteItem,SpecialOffer specialOffer, Ingredient ingredient) {
         this.id = id;
         this.amount = amount;
         this.price = price;
         this.name=name;
         this.baguetteItem = baguetteItem;
+        this.specialOffer=specialOffer;
+        this.ingredient = ingredient;
+    }
+
+    public Item(int amount, double price, String name, BaguetteItem baguetteItem,SpecialOffer specialOffer, Ingredient ingredient) {
+        this.amount = amount;
+        this.price = price;
+        this.name = name;
+        this.baguetteItem = baguetteItem;
+        this.specialOffer =specialOffer;
         this.ingredient = ingredient;
     }
 
@@ -36,6 +49,13 @@ public class Item {
         this.price = price;
         this.name = name;
         this.baguetteItem = baguetteItem;
+        this.ingredient = ingredient;
+    }
+
+    public Item(int amount, double price, String name, Ingredient ingredient) {
+        this.amount = amount;
+        this.price = price;
+        this.name = name;
         this.ingredient = ingredient;
     }
 
@@ -89,6 +109,14 @@ public class Item {
         this.name = name;
     }
 
+    public SpecialOffer getSpecialOffer() {
+        return specialOffer;
+    }
+
+    public void setSpecialOffer(SpecialOffer specialOffer) {
+        this.specialOffer = specialOffer;
+    }
+
     @Override
     public String toString() {
         return "Item{" +
@@ -97,6 +125,7 @@ public class Item {
                 ", price=" + price +
                 ", name='" + name + '\'' +
                 ", baguetteItem=" + baguetteItem +
+                ", specialOffer=" + specialOffer +
                 ", ingredient=" + ingredient +
                 '}';
     }

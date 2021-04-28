@@ -52,4 +52,12 @@ public class BaguetteItemController {
         return baguetteItemService.createBaguetteItem(baguetteOrderId, email);
     }
 
+    @RequestMapping(value = "/create/{baguetteOrderId}/{specialOfferId}", method = RequestMethod.POST)
+    public BaguetteItem createBaguetteItemFromSpecialOffer(@PathVariable("baguetteOrderId") Long baguetteOrderId, @PathVariable("specialOfferId") Long specialOfferId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
+        String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
+        return baguetteItemService.createBaguetteItemFromSpecialOffer(baguetteOrderId, specialOfferId, email);
+    }
+
 }
