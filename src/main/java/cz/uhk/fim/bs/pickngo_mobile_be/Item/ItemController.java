@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -24,7 +25,7 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/{baguetteItemId}/all", method = RequestMethod.GET)
-    public List<Item> getItems(@PathVariable("baguetteItemId") Long baguetteItemId) {
+    public Optional<List<Item>> getItems(@PathVariable("baguetteItemId") Long baguetteItemId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
 

@@ -36,8 +36,8 @@ public class BaguetteItemService {
     }
 
     public List<BaguetteItem> getBaguetteItems(Long baguetteOrderId, String email) {
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null){
+        Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
+        if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
@@ -46,74 +46,85 @@ public class BaguetteItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, objednávka nenalezena");
         }
-        BaguetteOrder orderByIdAndCustomer = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrderId,email);
-        if(orderByIdAndCustomer == null){
+        Optional<BaguetteOrder> orderByIdAndCustomer = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrderId,email);
+        if(!orderByIdAndCustomer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, objednávka nenalezena");
         }
-        List<BaguetteItem> baguetteItemList = baguetteItemRepository.findAllByBaguetteOrder_Id(orderByIdAndCustomer.getId());
-        return baguetteItemList;
+        Optional<List<BaguetteItem>> baguetteItemList = baguetteItemRepository.findAllByBaguetteOrder_Id(orderByIdAndCustomer.get().getId());
+        if(!baguetteItemList.isPresent()){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
+        }
+        return baguetteItemList.get();
 
     }
 
-    public BaguetteItem getBaguetteItem(Long baguetteItemId, String email) {
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null){
+    public Optional<BaguetteItem> getBaguetteItem(Long baguetteItemId, String email) {
+        Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
+        if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
         Optional<BaguetteItem> baguetteItem = baguetteItemRepository.findById(baguetteItemId);
-        if(baguetteItem.get().getBaguetteOrder().getCustomer().getEmail() != email){
+        if(!baguetteItem.isPresent()){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
+        }
+        if(!baguetteItem.get().getBaguetteOrder().getCustomer().getEmail().equals(email)){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, špatné údaje");
         }
-        return baguetteItemRepository.getOne(baguetteItemId);
+        return baguetteItemRepository.findById(baguetteItemId);
     }
 
     @Transactional
     public void removeBaguetteItem(Long baguetteItemId, String email) {
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null){
+        Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
+        if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
         Optional<BaguetteItem> baguetteItemOpt = baguetteItemRepository.findById(baguetteItemId);
-        if(baguetteItemOpt.get().getBaguetteOrder().getCustomer().getEmail() != email){
+        if(!baguetteItemOpt.isPresent()){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
+        }
+        if(!baguetteItemOpt.get().getBaguetteOrder().getCustomer().getEmail().equals(email)){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, špatné údaje");
         }
-        BaguetteItem baguetteItem = baguetteItemRepository.getOne(baguetteItemId);
-        BaguetteOrder baguetteOrder = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteItemOpt.get().getBaguetteOrder().getId(), email);
-        if(baguetteOrder == null){
+        Optional<BaguetteOrder> baguetteOrder = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteItemOpt.get().getBaguetteOrder().getId(), email);
+        if(!baguetteOrder.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka nenelazena");
         }
-        if (baguetteOrder.getState()!=0){
+        if (baguetteOrder.get().getState()!=0){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka již nelze měnit");
         }
-        List<Item> items = itemRepository.findAllByBaguetteItem_Id(baguetteItemId);
-        if(!items.isEmpty()) {
-            for (Item item : items) {
+        Optional<List<Item>> items = itemRepository.findAllByBaguetteItem_Id(baguetteItemId);
+        if(items.isPresent() && !items.get().isEmpty()) {
+            for (Item item : items.get()) {
                 itemRepository.delete(item);
             }
         }
-        baguetteItemRepository.delete(baguetteItem);
-        BaguetteOrder baguetteOrder1 = baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email);
-        if(baguetteOrder1==null){
+        baguetteItemRepository.delete(baguetteItemOpt.get());
+        Optional<BaguetteOrder> baguetteOrder1 = baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email);
+        if(!baguetteOrder1.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka nenelazena");
         }
-        if(baguetteOrder1.getBaguetteItems().isEmpty()){
-            baguetteOrderRepository.delete(baguetteOrder1);
+        if(baguetteOrder1.get().getBaguetteItems().isEmpty()){
+            baguetteOrderRepository.delete(baguetteOrder1.get());
         }
 
     }
 
     @Transactional
     public BaguetteItem createBaguetteItem(Long baguetteOrderId, String email) {
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null){
+        Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
+        if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
@@ -122,21 +133,21 @@ public class BaguetteItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, objednávka nenalezena");
         }
-        BaguetteOrder baguetteOrder = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrderOpt.get().getId(), email);
-        if(baguetteOrder == null){
+        Optional<BaguetteOrder> baguetteOrder = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrderOpt.get().getId(), email);
+        if(!baguetteOrder.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka nenelazena");
         }
-        if (baguetteOrder.getState()!=0){
+        if (baguetteOrder.get().getState()!=0){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka již nelze měnit");
         }
 
         BaguetteItem baguetteItem = new BaguetteItem();
-        baguetteItem.setBaguetteOrder(baguetteOrder);
+        baguetteItem.setBaguetteOrder(baguetteOrder.get());
 
-        baguetteOrder.getBaguetteItems().add(baguetteItem);
-        baguetteOrderRepository.save(baguetteOrder);
+        baguetteOrder.get().getBaguetteItems().add(baguetteItem);
+        baguetteOrderRepository.save(baguetteOrder.get());
         baguetteItemRepository.save(baguetteItem);
 
         return baguetteItem;
@@ -144,8 +155,8 @@ public class BaguetteItemService {
     }
 
     public BaguetteItem createBaguetteItemFromSpecialOffer(Long baguetteOrderId, Long specialOfferId, String email) {
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null){
+        Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
+        if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
@@ -154,12 +165,12 @@ public class BaguetteItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, objednávka nenalezena");
         }
-        BaguetteOrder baguetteOrder = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrderOpt.get().getId(), email);
-        if(baguetteOrder == null){
+        Optional<BaguetteOrder> baguetteOrder = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrderOpt.get().getId(), email);
+        if(!baguetteOrder.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka nenelazena");
         }
-        if (baguetteOrder.getState()!=0){
+        if (baguetteOrder.get().getState()!=0){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka již nelze měnit");
         }
@@ -179,9 +190,9 @@ public class BaguetteItemService {
         baguetteItem.setPrice(price);
         baguetteItem.setOffer(true);
         baguetteItem.setItems(items);
-        baguetteOrder.getBaguetteItems().add(baguetteItem);
-        baguetteOrder.setPrice(baguetteOrder.getPrice()+price);
-        baguetteOrderRepository.save(baguetteOrder);
+        baguetteOrder.get().getBaguetteItems().add(baguetteItem);
+        baguetteOrder.get().setPrice(baguetteOrder.get().getPrice()+price);
+        baguetteOrderRepository.save(baguetteOrder.get());
         baguetteItemRepository.save(baguetteItem);
         return baguetteItem;
     }

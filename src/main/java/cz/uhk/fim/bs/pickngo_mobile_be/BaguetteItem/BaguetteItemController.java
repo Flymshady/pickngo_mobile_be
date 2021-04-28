@@ -30,7 +30,7 @@ public class BaguetteItemController {
     }
 
     @RequestMapping(value = "/detail/{baguetteItemId}", method = RequestMethod.GET)
-    public BaguetteItem getBaguetteItem(@PathVariable("baguetteItemId") Long baguetteItemId){
+    public Optional<BaguetteItem> getBaguetteItem(@PathVariable("baguetteItemId") Long baguetteItemId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz

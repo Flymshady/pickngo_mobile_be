@@ -38,12 +38,12 @@ public class CustomOidcUserService extends OidcUserService {
 
         // see what other data from userRequest or oidcUser you need
 
-        Customer customerOptional = customerRepository.findCustomerByEmail(azureUserInfo.getEmail());
-        Customer customerOptional1 = customerRepository.findCustomerByEmail(azureUserInfo.getEmailShort());
-        Customer customerOptional2 = customerRepository.findCustomerByEmailShort(azureUserInfo.getEmail());
-        Customer customerOptional3 = customerRepository.findCustomerByEmailShort(azureUserInfo.getEmailShort());
+        Optional<Customer> customerOptional = customerRepository.findCustomerByEmail(azureUserInfo.getEmail());
+        Optional<Customer> customerOptional1 = customerRepository.findCustomerByEmail(azureUserInfo.getEmailShort());
+        Optional<Customer> customerOptional2 = customerRepository.findCustomerByEmailShort(azureUserInfo.getEmail());
+        Optional<Customer> customerOptional3 = customerRepository.findCustomerByEmailShort(azureUserInfo.getEmailShort());
 
-        if (customerOptional == null && customerOptional1==null && customerOptional2==null && customerOptional3==null) {
+        if (!customerOptional.isPresent() && !customerOptional1.isPresent() && !customerOptional2.isPresent() && !customerOptional3.isPresent()) {
             Customer customer = new Customer();
             customer.setEmail(azureUserInfo.getEmail());
             customer.setName(azureUserInfo.getName());

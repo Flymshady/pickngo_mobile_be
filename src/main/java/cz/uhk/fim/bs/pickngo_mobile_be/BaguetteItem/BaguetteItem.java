@@ -1,5 +1,6 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder.BaguetteOrder;
 import cz.uhk.fim.bs.pickngo_mobile_be.Item.Item;
 
@@ -16,6 +17,7 @@ public class BaguetteItem {
     @ManyToOne
     private BaguetteOrder baguetteOrder;
     private double price;
+    @JsonIgnore
     @OneToMany(mappedBy = "baguetteItem")
     private List<Item> items;
     private boolean offer;

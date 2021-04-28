@@ -14,8 +14,8 @@ public class SpecialOffer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "special_offer_sequence")
     private Long id;
     private String name;
-    @JsonIgnore
     private double price;
+    @JsonIgnore
     @OneToMany(mappedBy = "specialOffer")
     private List<Item> items;
     private boolean active;

@@ -23,7 +23,7 @@ public class BaguetteOrder {
     private Date date;
     private int state; //0-vytvářená 1-čeká, 2-přijatá, 3-dokončena, 4-zrušena
     private String note;
-  //  @JsonIgnore
+    @JsonIgnore
     @OneToMany(mappedBy = "baguetteOrder")
     private List<BaguetteItem> baguetteItems;
 

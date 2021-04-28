@@ -19,7 +19,6 @@ public class Ingredient {
     private double price;
     @ManyToOne
     private IngredientType ingredientType;
-
     @JsonIgnore
     @OneToMany(mappedBy = "ingredient")
     private List<Item> items;

@@ -27,8 +27,8 @@ public class CustomerService {
 
 
     public Customer addNewCustomer(Customer customer) {
-        Customer customerOptional = customerRepository.findCustomerByEmail(customer.getEmail());
-        if (customerOptional != null) {
+        Optional<Customer> customerOptional = customerRepository.findCustomerByEmail(customer.getEmail());
+        if (customerOptional.isPresent()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "email taken");
         }
@@ -51,17 +51,17 @@ public class CustomerService {
         if (name !=null && name.length() > 0 && !Objects.equals(customer.getName(), name)){
             customer.setName(name);
         }
-        if (email !=null && email.length() > 0 && !Objects.equals(customer.getEmail(), email)){
-            Customer customerOptional = customerRepository.findCustomerByEmail(email);
-            if (customerOptional != null){
+        if (email.length() > 0 && !Objects.equals(customer.getEmail(), email)){
+            Optional<Customer> customerOptional = customerRepository.findCustomerByEmail(email);
+            if (customerOptional.isPresent()){
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "email taken");
             }
             customer.setEmail(email);
         }
-        if (emailShort !=null && emailShort.length() > 0 && !Objects.equals(customer.getEmailShort(), emailShort)){
-            Customer customerOptional = customerRepository.findCustomerByEmailShort(emailShort);
-            if (customerOptional != null){
+        if (emailShort.length() > 0 && !Objects.equals(customer.getEmailShort(), emailShort)){
+            Optional<Customer> customerOptional = customerRepository.findCustomerByEmailShort(emailShort);
+            if (customerOptional.isPresent()){
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "email taken");
             }

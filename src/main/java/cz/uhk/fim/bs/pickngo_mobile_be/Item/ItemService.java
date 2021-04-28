@@ -32,9 +32,9 @@ public class ItemService {
     }
 
 
-    public List<Item> getItems(Long baguetteItemId, String email) {
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null){
+    public Optional<List<Item>> getItems(Long baguetteItemId, String email) {
+        Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
+        if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
@@ -43,7 +43,7 @@ public class ItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
         }
-        if(!baguetteItem.get().getBaguetteOrder().getCustomer().equals(customer)){
+        if(!baguetteItem.get().getBaguetteOrder().getCustomer().equals(customer.get())){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba oprávnění");
         }
@@ -53,8 +53,8 @@ public class ItemService {
 
     @Transactional
     public Item addNewItem(Item item, String email, Long baguetteItemId) {
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null){
+        Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
+        if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
@@ -63,70 +63,69 @@ public class ItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
         }
-        BaguetteItem baguetteItem = baguetteItemRepository.getOne(baguetteItemId);
-        if(baguetteItem.isOffer()){
+        if(baguetteItemOpt.get().isOffer()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Specialní nabídku nelze měnit");
         }
-        BaguetteOrder baguetteOrder = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteItemOpt.get().getBaguetteOrder().getId(), email);
-        if (baguetteOrder == null){
+        Optional<BaguetteOrder> baguetteOrder = baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteItemOpt.get().getBaguetteOrder().getId(), email);
+        if (!baguetteOrder.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, objednávka nenalezena");
-        }else if (baguetteOrder.getState()!=0){
+        }else if (baguetteOrder.get().getState()!=0){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, objednávku nelze měnit");
         }
         if(item.getIngredient().getIngredientType().getName().equals("Pečivo")) {
-            List<Item> pecivoList = itemRepository.findByIngredient_IngredientType_NameAndBaguetteItem_Id("Pečivo", baguetteItemId);
-            if (pecivoList==null) {
+            Optional<List<Item>> pecivoList = itemRepository.findByIngredient_IngredientType_NameAndBaguetteItem_Id("Pečivo", baguetteItemId);
+            if (!pecivoList.isPresent()) {
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Nelze přidat více pečiva do jedné bagety :)");
             }
         }
 
-        baguetteItem.setPrice(baguetteItem.getPrice() + item.getPrice()*item.getAmount());
-        baguetteItemRepository.save(baguetteItem);
-        baguetteOrder.setPrice(baguetteOrder.getPrice() + baguetteItem.getPrice());
-        baguetteOrderRepository.save(baguetteOrder);
+        baguetteItemOpt.get().setPrice(baguetteItemOpt.get().getPrice() + item.getPrice()*item.getAmount());
+        baguetteItemRepository.save(baguetteItemOpt.get());
+        baguetteOrder.get().setPrice(baguetteOrder.get().getPrice() + baguetteItemOpt.get().getPrice());
+        baguetteOrderRepository.save(baguetteOrder.get());
 
         Item itemNew = new Item();
         itemNew.setAmount(item.getAmount());
         itemNew.setIngredient(item.getIngredient());
         itemNew.setName(item.getName());
         itemNew.setPrice(item.getPrice());
-        itemNew.setBaguetteItem(baguetteItem);
+        itemNew.setBaguetteItem(baguetteItemOpt.get());
         return itemRepository.save(itemNew);
     }
 
     @Transactional
     public void updateItem(Long itemId, String email, int amount){
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null){
+        Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
+        if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
 
-        BaguetteOrder optBaguetteOrder = baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email);
-        if(optBaguetteOrder == null){
+        Optional<BaguetteOrder> optBaguetteOrder = baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email);
+        if(!optBaguetteOrder.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, objednávka nenalezena");
         }
-        Item item = itemRepository.getOne(itemId);
-        if(item == null){
+        Optional<Item> item = itemRepository.findById(itemId);
+        if(!item.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
         }
         if(amount<=0){
             removeItem(itemId, email);
         }else {
-            if(item.getIngredient().getIngredientType().getName().equals("Pečivo")){
+            if(item.get().getIngredient().getIngredientType().getName().equals("Pečivo")){
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Nelze přidat více pečiva do jedné bagety :)");
             }
-            int amountPrev = item.getAmount();
-            double itemPrice = item.getPrice();
+            int amountPrev = item.get().getAmount();
+            double itemPrice = item.get().getPrice();
 
-            Optional<BaguetteItem> baguetteItemOpt = baguetteItemRepository.findById(item.getBaguetteItem().getId());
+            Optional<BaguetteItem> baguetteItemOpt = baguetteItemRepository.findById(item.get().getBaguetteItem().getId());
             if(!baguetteItemOpt.isPresent()){
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
@@ -136,70 +135,68 @@ public class ItemService {
                         HttpStatus.BAD_REQUEST, "Specialní nabídku nelze měnit");
             }
 
-            BaguetteItem baguetteItem = baguetteItemRepository.getOne(baguetteItemOpt.get().getId());
-            baguetteItem.setPrice(baguetteItem.getPrice() - amountPrev*itemPrice+itemPrice*amount);
-            baguetteItemRepository.save(baguetteItem);
+            baguetteItemOpt.get().setPrice(baguetteItemOpt.get().getPrice() - amountPrev*itemPrice+itemPrice*amount);
+            baguetteItemRepository.save(baguetteItemOpt.get());
 
-            Optional<BaguetteOrder> baguetteOrderOptional = baguetteOrderRepository.findById(baguetteItem.getBaguetteOrder().getId());
+            Optional<BaguetteOrder> baguetteOrderOptional = baguetteOrderRepository.findById(baguetteItemOpt.get().getBaguetteOrder().getId());
             if(!baguetteOrderOptional.isPresent()){
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "chyba, objednávka nenalezena");
             }
-            BaguetteOrder baguetteOrder = baguetteOrderRepository.getOne(baguetteOrderOptional.get().getId());
-            baguetteOrder.setPrice(baguetteOrder.getPrice() - amountPrev*itemPrice + itemPrice*amount);
+            baguetteOrderOptional.get().setPrice(baguetteOrderOptional.get().getPrice() - amountPrev*itemPrice + itemPrice*amount);
 
-            baguetteOrderRepository.save(baguetteOrder);
-            item.setAmount(amount);
-            itemRepository.save(item);
+            baguetteOrderRepository.save(baguetteOrderOptional.get());
+            item.get().setAmount(amount);
+            itemRepository.save(item.get());
         }
 
     }
 
     @Transactional
     public void removeItem(Long itemId, String email){
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null){
+        Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
+        if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
 
-        BaguetteOrder optBaguetteOrder = baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email);
-        if(optBaguetteOrder == null){
+        Optional<BaguetteOrder> optBaguetteOrder = baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email);
+        if(!optBaguetteOrder.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, objednávka nenalezena");
         }
-        Item item = itemRepository.getOne(itemId);
-        if(item == null){
+        Optional<Item> item = itemRepository.findById(itemId);
+        if(!item.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
         }
-        BaguetteItem baguetteItem = baguetteItemRepository.getOne(item.getBaguetteItem().getId());
-        if(baguetteItem == null){
+        Optional<BaguetteItem> baguetteItem = baguetteItemRepository.findById(item.get().getBaguetteItem().getId());
+        if(!baguetteItem.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
         }
-        if(baguetteItem.isOffer()){
+        if(baguetteItem.get().isOffer()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Specialní nabídku nelze měnit");
         }
 
-        double price = item.getPrice() * item.getAmount();
-        int amount = item.getAmount();
+        double price = item.get().getPrice() * item.get().getAmount();
+        int amount = item.get().getAmount();
 
-        baguetteItem.getItems().remove(item);
-        itemRepository.delete(item);
-        if(baguetteItem.getItems().isEmpty()){
-            optBaguetteOrder.getBaguetteItems().remove(baguetteItem);
-            baguetteItemRepository.delete(baguetteItem);
-            baguetteOrderRepository.save(optBaguetteOrder);
+        baguetteItem.get().getItems().remove(item.get());
+        itemRepository.delete(item.get());
+        if(baguetteItem.get().getItems().isEmpty()){
+            optBaguetteOrder.get().getBaguetteItems().remove(baguetteItem.get());
+            baguetteItemRepository.delete(baguetteItem.get());
+            baguetteOrderRepository.save(optBaguetteOrder.get());
         }
-        if(optBaguetteOrder.getBaguetteItems().isEmpty()){
-            baguetteOrderRepository.delete(optBaguetteOrder);
+        if(optBaguetteOrder.get().getBaguetteItems().isEmpty()){
+            baguetteOrderRepository.delete(optBaguetteOrder.get());
         }else{
-            baguetteItem.setPrice(baguetteItem.getPrice()-amount*price);
-            baguetteItemRepository.save(baguetteItem);
-            optBaguetteOrder.setPrice(optBaguetteOrder.getPrice() - amount*price);
-            baguetteOrderRepository.save(optBaguetteOrder);
+            baguetteItem.get().setPrice(baguetteItem.get().getPrice()-amount*price);
+            baguetteItemRepository.save(baguetteItem.get());
+            optBaguetteOrder.get().setPrice(optBaguetteOrder.get().getPrice() - amount*price);
+            baguetteOrderRepository.save(optBaguetteOrder.get());
         }
 
     }
