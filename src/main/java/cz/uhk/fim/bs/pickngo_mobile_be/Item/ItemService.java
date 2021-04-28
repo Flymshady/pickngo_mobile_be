@@ -78,7 +78,7 @@ public class ItemService {
         }
         if(item.getIngredient().getIngredientType().getName().equals("Pečivo")) {
             List<Item> pecivoList = itemRepository.findByIngredient_IngredientType_NameAndBaguetteItem_Id("Pečivo", baguetteItemId);
-            if (!pecivoList.isEmpty()) {
+            if (pecivoList==null) {
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Nelze přidat více pečiva do jedné bagety :)");
             }
