@@ -40,7 +40,7 @@ public class ItemController {
 
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
 
-        return itemService.addNewItem(item, email, baguetteItemId);
+        return  itemService.addNewItem(item, email, baguetteItemId);
     }
 
     @RequestMapping(value = "/update/{itemId}", method = RequestMethod.PUT)

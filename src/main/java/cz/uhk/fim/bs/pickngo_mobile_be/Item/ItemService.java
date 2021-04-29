@@ -61,7 +61,7 @@ public class ItemService {
         Optional<BaguetteItem> baguetteItemOpt = baguetteItemRepository.findById(baguetteItemId);
         if (!baguetteItemOpt.isPresent()){
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
+                    HttpStatus.BAD_REQUEST, "chyba, položka s id "+baguetteItemId+" nenalezena");
         }
         if(baguetteItemOpt.get().isOffer()){
             throw new ResponseStatusException(
@@ -137,15 +137,18 @@ public class ItemService {
                         HttpStatus.BAD_REQUEST, "Specialní nabídku nelze měnit");
             }
 
-            baguetteItemOpt.get().setPrice(baguetteItemOpt.get().getPrice() - amountPrev*itemPrice+itemPrice*amount);
-            baguetteItemRepository.save(baguetteItemOpt.get());
+            double baguetteItemPricePrevious = baguetteItemOpt.get().getPrice();
 
             Optional<BaguetteOrder> baguetteOrderOptional = baguetteOrderRepository.findById(baguetteItemOpt.get().getBaguetteOrder().getId());
             if(!baguetteOrderOptional.isPresent()){
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "chyba, objednávka nenalezena");
             }
-            baguetteOrderOptional.get().setPrice(baguetteOrderOptional.get().getPrice() - amountPrev*itemPrice + itemPrice*amount);
+            double baguetteOrderPricePrevious = baguetteOrderOptional.get().getPrice();
+            baguetteItemOpt.get().setPrice(baguetteItemPricePrevious - amountPrev*itemPrice+itemPrice*amount);
+            baguetteItemRepository.save(baguetteItemOpt.get());
+
+            baguetteOrderOptional.get().setPrice(baguetteOrderPricePrevious - amountPrev*itemPrice + itemPrice*amount);
 
             baguetteOrderRepository.save(baguetteOrderOptional.get());
             item.get().setAmount(amount);
@@ -187,19 +190,12 @@ public class ItemService {
 
         baguetteItem.get().getItems().remove(item.get());
         itemRepository.delete(item.get());
-        if(baguetteItem.get().getItems().isEmpty()){
-            optBaguetteOrder.get().getBaguetteItems().remove(baguetteItem.get());
-            baguetteItemRepository.delete(baguetteItem.get());
-            baguetteOrderRepository.save(optBaguetteOrder.get());
-        }
-        if(optBaguetteOrder.get().getBaguetteItems().isEmpty()){
-            baguetteOrderRepository.delete(optBaguetteOrder.get());
-        }else{
-            baguetteItem.get().setPrice(baguetteItem.get().getPrice()-amount*price);
-            baguetteItemRepository.save(baguetteItem.get());
-            optBaguetteOrder.get().setPrice(optBaguetteOrder.get().getPrice() - amount*price);
-            baguetteOrderRepository.save(optBaguetteOrder.get());
-        }
+
+        baguetteItem.get().setPrice(baguetteItem.get().getPrice()-amount*price);
+        baguetteItemRepository.save(baguetteItem.get());
+        optBaguetteOrder.get().setPrice(optBaguetteOrder.get().getPrice() - amount*price);
+        baguetteOrderRepository.save(optBaguetteOrder.get());
+
 
     }
 
