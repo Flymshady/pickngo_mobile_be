@@ -96,6 +96,7 @@ public class ItemService {
         itemNew.setBaguetteItem(baguetteItemOpt.get());
         itemRepository.save(itemNew);
         return itemNew;
+
     }
 
     @Transactional
