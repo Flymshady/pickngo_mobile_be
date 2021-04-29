@@ -94,7 +94,8 @@ public class ItemService {
         itemNew.setName(item.getName());
         itemNew.setPrice(item.getPrice());
         itemNew.setBaguetteItem(baguetteItemOpt.get());
-        return itemRepository.save(itemNew);
+        itemRepository.save(itemNew);
+        return itemNew;
     }
 
     @Transactional

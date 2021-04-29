@@ -34,13 +34,13 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/create/{baguetteItemId}", method = RequestMethod.POST)
-    public void createNewItem(@PathVariable("baguetteItemId") Long baguetteItemId, @RequestBody Item item){
+    public Item createNewItem(@PathVariable("baguetteItemId") Long baguetteItemId, @RequestBody Item item){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
 
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
 
-        itemService.addNewItem(item, email, baguetteItemId);
+        return itemService.addNewItem(item, email, baguetteItemId);
     }
 
     @RequestMapping(value = "/update/{itemId}", method = RequestMethod.PUT)
