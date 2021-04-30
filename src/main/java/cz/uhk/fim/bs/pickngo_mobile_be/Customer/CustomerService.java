@@ -36,10 +36,15 @@ public class CustomerService {
     }
 
     @Transactional
-    public Customer updateCustomer(Long customerId, String name, String email, String emailShort){
+    public Customer updateCustomer(Long customerId, String name, String email, String emailShort, String emailTrue){
         Customer customer = customerRepository.findById(customerId).orElseThrow(()->
                 new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "customer with id "+ customerId+ "doesnt exist"));
+
+        if(!emailTrue.equals(customer.getEmail())){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "přístup zamítnut");
+        }
 
         if(email.length() < emailShort.length()) {
             String i;
