@@ -14,10 +14,11 @@ public class BaguetteItem {
     @SequenceGenerator(name="baguette_item_sequence", sequenceName = "baguette_item_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "baguette_item_sequence")
     private Long id;
+    @JsonIgnore
     @ManyToOne
     private BaguetteOrder baguetteOrder;
     private double price;
-    @JsonIgnore
+
     @OneToMany(mappedBy = "baguetteItem")
     private List<Item> items;
     private boolean offer;
