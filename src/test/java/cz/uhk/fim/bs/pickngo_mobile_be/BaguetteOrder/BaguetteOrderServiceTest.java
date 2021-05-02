@@ -1,12 +1,9 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder;
 
-import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItem;
 import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItemRepository;
 import cz.uhk.fim.bs.pickngo_mobile_be.Customer.Customer;
 import cz.uhk.fim.bs.pickngo_mobile_be.Customer.CustomerRepository;
-import cz.uhk.fim.bs.pickngo_mobile_be.Item.Item;
 import cz.uhk.fim.bs.pickngo_mobile_be.Item.ItemRepository;
-import cz.uhk.fim.bs.pickngo_mobile_be.Item.ItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -23,7 +20,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;

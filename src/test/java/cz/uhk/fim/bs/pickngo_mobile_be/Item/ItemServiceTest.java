@@ -6,7 +6,6 @@ import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder.BaguetteOrder;
 import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder.BaguetteOrderRepository;
 import cz.uhk.fim.bs.pickngo_mobile_be.Customer.Customer;
 import cz.uhk.fim.bs.pickngo_mobile_be.Customer.CustomerRepository;
-import cz.uhk.fim.bs.pickngo_mobile_be.Customer.CustomerService;
 import cz.uhk.fim.bs.pickngo_mobile_be.Ingredient.Ingredient;
 import cz.uhk.fim.bs.pickngo_mobile_be.IngredientType.IngredientType;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +21,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;

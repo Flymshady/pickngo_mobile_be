@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +76,7 @@ public class BaguetteItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, špatné údaje");
         }
-        return baguetteItemRepository.findById(baguetteItemId);
+        return baguetteItem;
     }
 
     @Transactional
@@ -103,6 +104,11 @@ public class BaguetteItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka již nelze měnit");
         }
+        Optional<BaguetteOrder> baguetteOrder1 = baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email);
+        if(!baguetteOrder1.isPresent()){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Objednávka nenelazena");
+        }
         Optional<List<Item>> items = itemRepository.findAllByBaguetteItem_Id(baguetteItemId);
         if(items.isPresent() && !items.get().isEmpty()) {
             for (Item item : items.get()) {
@@ -110,14 +116,13 @@ public class BaguetteItemService {
             }
         }
         baguetteItemRepository.delete(baguetteItemOpt.get());
-        Optional<BaguetteOrder> baguetteOrder1 = baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email);
-        if(!baguetteOrder1.isPresent()){
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Objednávka nenelazena");
+
+        if(baguetteOrder1.get().getBaguetteItems()!=null){
+            if(baguetteOrder1.get().getBaguetteItems().isEmpty()){
+                baguetteOrderRepository.delete(baguetteOrder1.get());
+            }
         }
-        if(baguetteOrder1.get().getBaguetteItems().isEmpty()){
-            baguetteOrderRepository.delete(baguetteOrder1.get());
-        }
+
 
     }
 
@@ -145,8 +150,15 @@ public class BaguetteItemService {
 
         BaguetteItem baguetteItem = new BaguetteItem();
         baguetteItem.setBaguetteOrder(baguetteOrder.get());
+        baguetteItem.setOffer(false);
+        if(baguetteOrder.get().getBaguetteItems()!=null){
+            baguetteOrder.get().getBaguetteItems().add(baguetteItem);
+        }else {
+            List<BaguetteItem> baguetteItemList = new ArrayList<>();
+            baguetteItemList.add(baguetteItem);
+            baguetteOrder.get().setBaguetteItems(baguetteItemList);
+        }
 
-        baguetteOrder.get().getBaguetteItems().add(baguetteItem);
         baguetteOrderRepository.save(baguetteOrder.get());
         baguetteItemRepository.save(baguetteItem);
 
