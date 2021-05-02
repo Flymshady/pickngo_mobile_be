@@ -36,7 +36,26 @@ public class BaguetteOrder {
         this.baguetteItems = baguetteItems;
     }
 
+    public BaguetteOrder(Long id, Customer customer, double price, Date date, int state, String note, List<BaguetteItem> baguetteItems) {
+        this.id=id;
+        this.customer = customer;
+        this.price = price;
+        this.date = date;
+        this.state = state;
+        this.note = note;
+        this.baguetteItems = baguetteItems;
+    }
+
     public BaguetteOrder(Customer customer, double price, Date date, int state, String note) {
+        this.customer = customer;
+        this.price = price;
+        this.date = date;
+        this.state = state;
+        this.note = note;
+    }
+
+    public BaguetteOrder(Long id,Customer customer, double price, Date date, int state, String note) {
+        this.id = id;
         this.customer = customer;
         this.price = price;
         this.date = date;

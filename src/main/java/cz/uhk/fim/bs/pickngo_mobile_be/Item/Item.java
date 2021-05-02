@@ -55,6 +55,15 @@ public class Item {
         this.ingredient = ingredient;
     }
 
+    public Item(Long id, int amount, double price, String name, BaguetteItem baguetteItem, Ingredient ingredient) {
+        this.id=id;
+        this.amount = amount;
+        this.price = price;
+        this.name = name;
+        this.baguetteItem = baguetteItem;
+        this.ingredient = ingredient;
+    }
+
     public Item(int amount, double price, String name, Ingredient ingredient) {
         this.amount = amount;
         this.price = price;

@@ -117,6 +117,12 @@ public class ItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
         }
+
+        if(!item.get().getBaguetteItem().getBaguetteOrder().getCustomer().equals(customer.get())){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "chyba oprávnění");
+        }
+
         if(amount<=0){
             removeItem(itemId, email);
         }else {
@@ -175,6 +181,10 @@ public class ItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
         }
+        if(!item.get().getBaguetteItem().getBaguetteOrder().getCustomer().equals(customer.get())){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "chyba oprávnění");
+        }
         Optional<BaguetteItem> baguetteItem = baguetteItemRepository.findById(item.get().getBaguetteItem().getId());
         if(!baguetteItem.isPresent()){
             throw new ResponseStatusException(
@@ -188,7 +198,9 @@ public class ItemService {
         double price = item.get().getPrice() * item.get().getAmount();
         int amount = item.get().getAmount();
 
-        baguetteItem.get().getItems().remove(item.get());
+        if(baguetteItem.get().getItems() !=null){
+            baguetteItem.get().getItems().remove(item.get());
+        }
         itemRepository.delete(item.get());
 
         baguetteItem.get().setPrice(baguetteItem.get().getPrice()-amount*price);
