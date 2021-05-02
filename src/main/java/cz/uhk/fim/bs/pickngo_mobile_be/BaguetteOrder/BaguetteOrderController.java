@@ -23,7 +23,7 @@ public class BaguetteOrderController {
         this.baguetteOrderService = baguetteOrderService;
     }
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<BaguetteOrder> getBaguetteOrders(){
+    public Optional<List<BaguetteOrder>> getBaguetteOrders(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
@@ -31,7 +31,7 @@ public class BaguetteOrderController {
     }
 
     @RequestMapping(value = "/all/{state}", method = RequestMethod.GET)
-    public List<BaguetteOrder> getBaguetteOrdersByState(@PathVariable("state") int state){
+    public Optional<List<BaguetteOrder>> getBaguetteOrdersByState(@PathVariable("state") int state){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
@@ -39,7 +39,7 @@ public class BaguetteOrderController {
     }
 
     @RequestMapping(value = "/detail/{baguetteOrderId}", method = RequestMethod.GET)
-    public BaguetteOrder getBaguetteOrder(@PathVariable("baguetteOrderId") Long baguetteOrderId){
+    public Optional<BaguetteOrder> getBaguetteOrder(@PathVariable("baguetteOrderId") Long baguetteOrderId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz
@@ -79,7 +79,7 @@ public class BaguetteOrderController {
     }
 
     @RequestMapping(value = "/confirm/{baguetteOrderId}", method = RequestMethod.PUT)
-    public void confirmBaguetteOrder(@PathVariable("baguetteOrderId") Long baguetteOrderId, @RequestParam Date date) {
+    public void confirmBaguetteOrder(@PathVariable("baguetteOrderId") Long baguetteOrderId, @RequestParam String date) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz

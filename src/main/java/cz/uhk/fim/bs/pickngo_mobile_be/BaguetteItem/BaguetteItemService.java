@@ -35,7 +35,7 @@ public class BaguetteItemService {
         this.specialOfferRepository = specialOfferRepository;
     }
 
-    public List<BaguetteItem> getBaguetteItems(Long baguetteOrderId, String email) {
+    public Optional<List<BaguetteItem>> getBaguetteItems(Long baguetteOrderId, String email) {
         Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
         if (!customer.isPresent()){
             throw new ResponseStatusException(
@@ -56,7 +56,7 @@ public class BaguetteItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, položka nenalezena");
         }
-        return baguetteItemList.get();
+        return baguetteItemList;
 
     }
 

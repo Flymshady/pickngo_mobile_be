@@ -22,7 +22,7 @@ public class BaguetteItemController {
         this.baguetteItemService = baguetteItemService;
     }
     @RequestMapping(value = "/all/{baguetteOrderId}", method = RequestMethod.GET)
-    public List<BaguetteItem> getBaguetteItems(@PathVariable("baguetteOrderId") Long baguetteOrderId){
+    public Optional<List<BaguetteItem>> getBaguetteItems(@PathVariable("baguetteOrderId") Long baguetteOrderId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
         String email = authentication.getPrincipal().getAttribute("email"); //vraci jmeno.prijmeni@uhk.cz

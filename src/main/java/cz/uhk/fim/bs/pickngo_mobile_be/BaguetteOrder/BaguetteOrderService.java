@@ -12,8 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -32,28 +35,28 @@ public class BaguetteOrderService {
         this.itemRepository = itemRepository;
     }
 
-    public List<BaguetteOrder> getBaguetteOrders(String email) {
+    public Optional<List<BaguetteOrder>> getBaguetteOrders(String email) {
         Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
         if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
         Optional<List<BaguetteOrder>> baguetteOrderList = baguetteOrderRepository.findBaguetteOrderByCustomer_Email(email);
-        return baguetteOrderList.get();
+        return baguetteOrderList;
 
     }
 
-    public List<BaguetteOrder> getBaguetteOrdersByState(String email, int state) {
+    public Optional<List<BaguetteOrder>> getBaguetteOrdersByState(String email, int state) {
         Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
         if (!customer.isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "chyba, uživatel nenalezen");
         }
         Optional<List<BaguetteOrder>> baguetteOrderList = baguetteOrderRepository.findAllByStateAndCustomer_Email(state, email);
-        return baguetteOrderList.get();
+        return baguetteOrderList;
     }
 
-    public BaguetteOrder getBaguetteOrderId(Long baguetteOrderId, String email) {
+    public Optional<BaguetteOrder> getBaguetteOrderId(Long baguetteOrderId, String email) {
         Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
         if (!customer.isPresent()){
             throw new ResponseStatusException(
@@ -64,7 +67,7 @@ public class BaguetteOrderService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka nenelazena");
         }
-        return baguetteOrder.get();
+        return baguetteOrder;
     }
 
     @Transactional
@@ -125,7 +128,7 @@ public class BaguetteOrderService {
     }
 
     @Transactional
-    public void confirmBaguetteOrder(Long baguetteOrderId, Date date, String email) {
+    public void confirmBaguetteOrder(Long baguetteOrderId, String date, String email) {
         Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
         if (!customer.isPresent()){
             throw new ResponseStatusException(
@@ -138,7 +141,16 @@ public class BaguetteOrderService {
         }
         if (baguetteOrder.get().getState()==0){
 
-            baguetteOrder.get().setDate(date);
+            DateFormat format = new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss", Locale.ENGLISH);
+            Date dateS=null;
+            try{
+                dateS = format.parse(date);
+            }catch (Exception ex){
+                System.out.println(ex.getMessage());
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Date fail");
+            }
+            baguetteOrder.get().setDate(dateS);
             baguetteOrder.get().setState(1);
             baguetteOrderRepository.save(baguetteOrder.get());
 
