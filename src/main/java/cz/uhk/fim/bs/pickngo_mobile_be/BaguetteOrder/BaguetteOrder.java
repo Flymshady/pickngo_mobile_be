@@ -1,9 +1,11 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItem;
 import cz.uhk.fim.bs.pickngo_mobile_be.Item.Item;
 import cz.uhk.fim.bs.pickngo_mobile_be.Customer.Customer;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,6 +22,8 @@ public class BaguetteOrder {
     @ManyToOne
     private Customer customer;
     private double price;
+    @DateTimeFormat(pattern = "dd-MM-yyyy, HH:mm:ss")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy, HH:mm:ss")
     private Date date;
     private int state; //0-vytvářená 1-čeká, 2-přijatá, 3-dokončena, 4-zrušena
     private String note;

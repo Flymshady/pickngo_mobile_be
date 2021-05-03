@@ -85,7 +85,7 @@ public class ItemService {
 
         baguetteItemOpt.get().setPrice(baguetteItemOpt.get().getPrice() + item.getPrice()*item.getAmount());
         baguetteItemRepository.save(baguetteItemOpt.get());
-        baguetteOrder.get().setPrice(baguetteOrder.get().getPrice() + baguetteItemOpt.get().getPrice());
+        baguetteOrder.get().setPrice(baguetteOrder.get().getPrice() + item.getPrice()*item.getAmount());
         baguetteOrderRepository.save(baguetteOrder.get());
 
         Item itemNew = new Item();
