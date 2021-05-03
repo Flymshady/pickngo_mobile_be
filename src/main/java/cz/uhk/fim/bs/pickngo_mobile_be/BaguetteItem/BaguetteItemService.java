@@ -202,10 +202,11 @@ public class BaguetteItemService {
         baguetteItem.setPrice(price);
         baguetteItem.setOffer(true);
         baguetteItem.setItems(items);
+        baguetteItem.setBaguetteOrder(baguetteOrder.get());
         baguetteOrder.get().getBaguetteItems().add(baguetteItem);
         baguetteOrder.get().setPrice(baguetteOrder.get().getPrice()+price);
-        baguetteOrderRepository.save(baguetteOrder.get());
         baguetteItemRepository.save(baguetteItem);
+        baguetteOrderRepository.save(baguetteOrder.get());
         return baguetteItem;
     }
 }
