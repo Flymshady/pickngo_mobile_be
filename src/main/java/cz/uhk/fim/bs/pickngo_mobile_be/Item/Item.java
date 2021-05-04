@@ -69,6 +69,22 @@ public class Item {
         this.name = name;
         this.ingredient = ingredient;
     }
+    public Item(int amount, double price, String name, SpecialOffer specialOffer, Ingredient ingredient) {
+        this.amount = amount;
+        this.price = price;
+        this.name = name;
+        this.specialOffer = specialOffer;
+        this.ingredient = ingredient;
+    }
+
+    public Item(Long id, int amount, double price, String name, SpecialOffer specialOffer, Ingredient ingredient) {
+        this.id=id;
+        this.amount = amount;
+        this.price = price;
+        this.name = name;
+        this.specialOffer = specialOffer;
+        this.ingredient = ingredient;
+    }
 
     public Item(){}
 

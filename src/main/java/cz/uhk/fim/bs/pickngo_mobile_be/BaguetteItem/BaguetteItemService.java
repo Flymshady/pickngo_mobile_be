@@ -194,13 +194,12 @@ public class BaguetteItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Speciální nabídka není k dispozici");
         }
-
-        List<Item> items = specialOfferOptional.get().getItems();
         double price = specialOfferOptional.get().getPrice();
         BaguetteItem baguetteItem = new BaguetteItem();
+        Optional<List<Item>> items = itemRepository.findAllBySpecialOffer_Id(specialOfferOptional.get().getId());
+        items.ifPresent(baguetteItem::setItems);
         baguetteItem.setPrice(price);
         baguetteItem.setOffer(true);
-        baguetteItem.setItems(items);
         baguetteItem.setBaguetteOrder(baguetteOrder.get());
         baguetteOrder.get().getBaguetteItems().add(baguetteItem);
         baguetteOrder.get().setPrice(baguetteOrder.get().getPrice()+price);

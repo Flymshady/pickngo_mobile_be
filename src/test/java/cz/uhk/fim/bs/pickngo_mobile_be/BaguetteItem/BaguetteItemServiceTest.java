@@ -12,6 +12,7 @@ import cz.uhk.fim.bs.pickngo_mobile_be.Item.ItemRepository;
 import cz.uhk.fim.bs.pickngo_mobile_be.SpecialOffer.SpecialOffer;
 import cz.uhk.fim.bs.pickngo_mobile_be.SpecialOffer.SpecialOfferRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -361,6 +362,7 @@ class BaguetteItemServiceTest {
         given(baguetteOrderRepository.findById(baguetteOrder.getId())).willReturn(Optional.of(baguetteOrder));
         given(baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrder.getId(), email)).willReturn(Optional.of(baguetteOrder));
         given(specialOfferRepository.findById(specialOffer.getId())).willReturn(Optional.of(specialOffer));
+        given(itemRepository.findAllBySpecialOffer_Id(specialOffer.getId())).willReturn(Optional.of(items));
 
         underTest.createBaguetteItemFromSpecialOffer(baguetteOrder.getId(), specialOffer.getId(),email);
         ArgumentCaptor<BaguetteItem> baguetteItemArgumentCaptor = ArgumentCaptor.forClass(BaguetteItem.class);
