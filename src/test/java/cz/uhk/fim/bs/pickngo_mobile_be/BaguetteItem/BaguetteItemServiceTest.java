@@ -137,7 +137,6 @@ class BaguetteItemServiceTest {
         BaguetteOrder baguetteOrder = new BaguetteOrder(1L, customer, 2.0, new Date(), 0,"note");
         BaguetteItem baguetteItem= new BaguetteItem(baguetteItemId, baguetteOrder, 20.0, false);
         given(customerRepository.findCustomerByEmail(email)).willReturn(Optional.empty());
-    //    given(baguetteItemRepository.findById(baguetteItem.getId())).willReturn(Optional.of(baguetteItem));
 
         assertThatThrownBy(() ->underTest.getBaguetteItem(baguetteItemId,email))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("chyba, uživatel nenalezen");

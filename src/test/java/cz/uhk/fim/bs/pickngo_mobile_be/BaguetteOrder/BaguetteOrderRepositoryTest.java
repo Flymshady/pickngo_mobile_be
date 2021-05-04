@@ -38,10 +38,9 @@ class BaguetteOrderRepositoryTest {
         BaguetteOrder baguetteOrder = new BaguetteOrder(customer, 1.0, new Date(),0, "note");
 
         underTest.save(baguetteOrder);
-        //
+
         Optional<BaguetteOrder> order = underTest.findBaguetteOrderByStateAndCustomer_Email(0, customer.getEmail());
 
-        //then
         assertThat(order.get()).isEqualTo(baguetteOrder);
     }
 
@@ -53,10 +52,9 @@ class BaguetteOrderRepositoryTest {
         BaguetteOrder baguetteOrder = new BaguetteOrder(customer, 1.0, new Date(),0, "note");
 
         underTest.save(baguetteOrder);
-        //
+
         Optional<List<BaguetteOrder>> list = underTest.findBaguetteOrderByCustomer_Email(customer.getEmail());
 
-        //then
         assertThat(list.get()).contains(baguetteOrder);
     }
 
@@ -68,10 +66,9 @@ class BaguetteOrderRepositoryTest {
         BaguetteOrder baguetteOrder = new BaguetteOrder(customer, 1.0, new Date(),0, "note");
 
         underTest.save(baguetteOrder);
-        //
+
         Optional<List<BaguetteOrder>> list = underTest.findAllByStateAndCustomer_Email(0, customer.getEmail());
 
-        //then
         assertThat(list.get()).contains(baguetteOrder);
     }
 
@@ -83,10 +80,9 @@ class BaguetteOrderRepositoryTest {
         BaguetteOrder baguetteOrder = new BaguetteOrder(customer, 1.0, new Date(),0, "note");
 
         underTest.save(baguetteOrder);
-        //
+
         Optional<BaguetteOrder> order = underTest.findBaguetteOrderByIdAndCustomer_Email(baguetteOrder.getId(), customer.getEmail());
 
-        //then
         assertThat(order.get()).isEqualTo(baguetteOrder);
     }
 

@@ -64,7 +64,6 @@ class ItemServiceTest {
         BaguetteItem baguetteItem= new BaguetteItem(1L, baguetteOrder, 20.0, false);
 
         given(customerRepository.findCustomerByEmail(email)).willReturn(Optional.empty());
-      //  given(baguetteItemRepository.findById(baguetteItem.getId())).willReturn(Optional.of(baguetteItem));
 
         assertThatThrownBy(() ->underTest.getItems(baguetteItem.getId(), email))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("chyba, uživatel nenalezen");
@@ -200,7 +199,6 @@ class ItemServiceTest {
         given(baguetteItemRepository.findById(baguetteItem.getId())).willReturn(Optional.of(baguetteItem));
         given(baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrder.getId(), email)).willReturn(Optional.empty());
 
-
         assertThatThrownBy(() ->underTest.addNewItem(item, email, baguetteItemId))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("chyba, objednávka nenalezena");
         verify(itemRepository, never()).save(any());
@@ -221,7 +219,6 @@ class ItemServiceTest {
         given(baguetteItemRepository.findById(baguetteItem.getId())).willReturn(Optional.of(baguetteItem));
         given(baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrder.getId(), email)).willReturn(Optional.empty());
 
-
         assertThatThrownBy(() ->underTest.addNewItem(item, email, baguetteItemId))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("chyba, objednávku nelze měnit");
         verify(itemRepository, never()).save(any());
@@ -241,7 +238,6 @@ class ItemServiceTest {
         given(customerRepository.findCustomerByEmail(email)).willReturn(Optional.of(customer));
         given(baguetteItemRepository.findById(baguetteItem.getId())).willReturn(Optional.of(baguetteItem));
         given(baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrder.getId(), email)).willReturn(Optional.empty());
-
 
         assertThatThrownBy(() ->underTest.addNewItem(item, email, baguetteItemId))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("Nelze přidat více pečiva do jedné bagety :)");
@@ -313,7 +309,6 @@ class ItemServiceTest {
         given(customerRepository.findCustomerByEmail(email)).willReturn(Optional.of(customer));
         given(baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email)).willReturn(Optional.empty());
 
-
         assertThatThrownBy(() ->underTest.updateItem(item2.getId(), email, item2.getAmount()))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("chyba, objednávka nenalezen");
         verify(itemRepository, never()).save(any());
@@ -332,7 +327,6 @@ class ItemServiceTest {
 
         given(customerRepository.findCustomerByEmail(email)).willReturn(Optional.of(customer));
         given(baguetteOrderRepository.findBaguetteOrderByStateAndCustomer_Email(0, email)).willReturn(Optional.of(baguetteOrder));
-
 
         assertThatThrownBy(() ->underTest.updateItem(item2.getId(), email, item2.getAmount()))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("chyba, objednávka nenalezen");

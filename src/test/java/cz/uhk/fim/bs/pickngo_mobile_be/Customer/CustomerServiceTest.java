@@ -82,8 +82,6 @@ class CustomerServiceTest {
                 "shortemail2@shortemail.cz"
         );
         given(customerRepository.findById(customer2.getId())).willReturn(Optional.of(customer));
-   //     given(customerRepository.findCustomerByEmail(customer2.getEmail())).willReturn(Optional.empty());
-    //    given(customerRepository.findCustomerByEmailShort(customer.getEmailShort())).willReturn(Optional.empty());
 
         underTest.updateCustomer(customer2.getId(), customer2.getName(), customer2.getEmail(), customer2.getEmailShort(), emailTrue);
     }
@@ -103,8 +101,6 @@ class CustomerServiceTest {
                 "shortemail2@shortemail.cz"
         );
         given(customerRepository.findById(customer2.getId())).willReturn(Optional.of(customer));
-        //     given(customerRepository.findCustomerByEmail(customer2.getEmail())).willReturn(Optional.empty());
-        //    given(customerRepository.findCustomerByEmailShort(customer.getEmailShort())).willReturn(Optional.empty());
 
         assertThatThrownBy(() ->underTest.updateCustomer(customer2.getId(), customer2.getName(), customer2.getEmail(), customer2.getEmailShort(), emailTrue))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("přístup zamítnut");
@@ -133,9 +129,6 @@ class CustomerServiceTest {
                 "email3@email.cz",
                 "shortemail3@shortemail.cz"
         );
-    //    given(customerRepository.findById(customer2.getId())).willReturn(Optional.of(customer));
-     //   given(customerRepository.findCustomerByEmail(customer2.getEmail())).willReturn(Optional.of(customer3));
-        //    given(customerRepository.findCustomerByEmailShort(customer.getEmailShort())).willReturn(Optional.empty());
 
         assertThatThrownBy(() ->underTest.updateCustomer(customer2.getId(), customer2.getName(), customer2.getEmail(), customer2.getEmailShort(), emailTrue))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("email taken");
@@ -164,9 +157,6 @@ class CustomerServiceTest {
                 "email3@email.cz",
                 "shortemail3@shortemail.cz"
         );
-        //    given(customerRepository.findById(customer2.getId())).willReturn(Optional.of(customer));
-        //   given(customerRepository.findCustomerByEmail(customer2.getEmail())).willReturn(Optional.of(customer3));
-        //    given(customerRepository.findCustomerByEmailShort(customer.getEmailShort())).willReturn(Optional.empty());
 
         assertThatThrownBy(() ->underTest.updateCustomer(customer2.getId(), customer2.getName(), customer2.getEmail(), customer2.getEmailShort(), emailTrue))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("email taken");
@@ -195,9 +185,7 @@ class CustomerServiceTest {
                 "email3@email.cz",
                 "shortemail3@shortemail.cz"
         );
-            given(customerRepository.findById(customer2.getId())).willReturn(Optional.empty());
-        //   given(customerRepository.findCustomerByEmail(customer2.getEmail())).willReturn(Optional.of(customer3));
-        //    given(customerRepository.findCustomerByEmailShort(customer.getEmailShort())).willReturn(Optional.empty());
+        given(customerRepository.findById(customer2.getId())).willReturn(Optional.empty());
 
         assertThatThrownBy(() ->underTest.updateCustomer(customer2.getId(), customer2.getName(), customer2.getEmail(), customer2.getEmailShort(), emailTrue))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("customer with id "+ customer2.getId()+ "doesnt exist");

@@ -3,7 +3,6 @@ package cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItem;
-import cz.uhk.fim.bs.pickngo_mobile_be.Item.Item;
 import cz.uhk.fim.bs.pickngo_mobile_be.Customer.Customer;
 import org.springframework.format.annotation.DateTimeFormat;
 

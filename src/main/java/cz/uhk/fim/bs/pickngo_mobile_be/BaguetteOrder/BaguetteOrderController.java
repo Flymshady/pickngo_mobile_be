@@ -6,7 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +13,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path="/baguetteOrder")
 public class BaguetteOrderController {
-
 
     private final BaguetteOrderService baguetteOrderService;
 

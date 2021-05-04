@@ -15,12 +15,10 @@ import java.util.Optional;
 @RequestMapping(path="/item")
 public class ItemController {
 
-    private final CustomerService customerService;
     private final ItemService itemService;
 
     @Autowired
-    public ItemController(CustomerService customerService, ItemService itemService) {
-        this.customerService = customerService;
+    public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 

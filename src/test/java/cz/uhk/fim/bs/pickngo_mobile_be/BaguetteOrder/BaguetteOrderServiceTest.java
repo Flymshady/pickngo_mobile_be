@@ -234,7 +234,6 @@ class BaguetteOrderServiceTest {
     }
 
     @Test
-    @Disabled
     void confirmBaguetteOrder() {
         String email ="email";
         Long baguetteOrderId = 1L;
@@ -252,8 +251,7 @@ class BaguetteOrderServiceTest {
         BaguetteOrder capturedBaguetteOrder = baguetteOrderArgumentCaptor.getValue();
 
         assertThat(capturedBaguetteOrder).isExactlyInstanceOf(BaguetteOrder.class);
-        System.out.println(capturedBaguetteOrder.getDate());
-        //assertThat(capturedBaguetteOrder.getDate().toString()).isEqualTo(datestring);
+
     }
     @Test
     void WontConfirmBaguetteOrder() {
@@ -264,7 +262,6 @@ class BaguetteOrderServiceTest {
         BaguetteOrder baguetteOrder = new BaguetteOrder(baguetteOrderId, customer, 2.0, new Date(), 0, "note");
 
         given(customerRepository.findCustomerByEmail(email)).willReturn(Optional.empty());
-     //   given(baguetteOrderRepository.findBaguetteOrderByIdAndCustomer_Email(baguetteOrder.getId(), email)).willReturn(Optional.of(baguetteOrder));
 
         assertThatThrownBy(() ->underTest.confirmBaguetteOrder(baguetteOrder.getId(), datestring, email))
                 .isInstanceOf(ResponseStatusException.class).withFailMessage("chyba, uživatel nenalezen");
@@ -350,7 +347,6 @@ class BaguetteOrderServiceTest {
         verify(baguetteOrderRepository, never()).save(any());
 
     }
-
 
     @Test
     void getBaguetteOrderActual() {

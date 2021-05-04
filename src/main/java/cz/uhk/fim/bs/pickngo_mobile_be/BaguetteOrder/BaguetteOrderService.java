@@ -94,7 +94,6 @@ public class BaguetteOrderService {
                     }
                     baguetteItemRepository.delete(baguetteItem);
                 }
-
             }
             baguetteOrderRepository.delete(baguetteOrder.get());
         }else {

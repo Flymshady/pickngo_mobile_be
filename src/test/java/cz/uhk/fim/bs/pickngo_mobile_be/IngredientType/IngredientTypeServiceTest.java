@@ -1,6 +1,5 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.IngredientType;
 
-import cz.uhk.fim.bs.pickngo_mobile_be.Ingredient.IngredientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +13,11 @@ class IngredientTypeServiceTest {
 
     @Mock
     private IngredientTypeRepository ingredientTypeRepository;
-    @Mock private IngredientRepository ingredientRepository;
     private IngredientTypeService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new IngredientTypeService(ingredientTypeRepository, ingredientRepository);
+        underTest = new IngredientTypeService(ingredientTypeRepository);
     }
 
     @Test

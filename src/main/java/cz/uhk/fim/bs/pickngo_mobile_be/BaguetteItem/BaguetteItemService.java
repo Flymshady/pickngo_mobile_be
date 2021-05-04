@@ -122,8 +122,6 @@ public class BaguetteItemService {
                 baguetteOrderRepository.delete(baguetteOrder1.get());
             }
         }
-
-
     }
 
     @Transactional
@@ -166,6 +164,7 @@ public class BaguetteItemService {
 
     }
 
+    @Transactional
     public BaguetteItem createBaguetteItemFromSpecialOffer(Long baguetteOrderId, Long specialOfferId, String email) {
         Optional<Customer> customer = customerRepository.findCustomerByEmail(email);
         if (!customer.isPresent()){

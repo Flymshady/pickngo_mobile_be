@@ -36,8 +36,6 @@ public class CustomOidcUserService extends OidcUserService {
     private OidcUser processOidcUser(OidcUserRequest userRequest, OidcUser oidcUser) {
         AzureUserInfo azureUserInfo = new AzureUserInfo(oidcUser.getAttributes());
 
-        // see what other data from userRequest or oidcUser you need
-
         Optional<Customer> customerOptional = customerRepository.findCustomerByEmail(azureUserInfo.getEmail());
         Optional<Customer> customerOptional1 = customerRepository.findCustomerByEmail(azureUserInfo.getEmailShort());
         Optional<Customer> customerOptional2 = customerRepository.findCustomerByEmailShort(azureUserInfo.getEmail());
@@ -48,8 +46,6 @@ public class CustomOidcUserService extends OidcUserService {
             customer.setEmail(azureUserInfo.getEmail());
             customer.setName(azureUserInfo.getName());
             customer.setEmailShort(azureUserInfo.getEmailShort());
-
-            // set other needed data
 
             customerRepository.save(customer);
         }

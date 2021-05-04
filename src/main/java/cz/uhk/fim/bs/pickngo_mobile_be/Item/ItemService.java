@@ -50,7 +50,6 @@ public class ItemService {
         return itemRepository.findAllByBaguetteItem_Id(baguetteItemId);
     }
 
-
     @Transactional
     public Item addNewItem(Item item, String email, Long baguetteItemId) {
         Optional<Customer> customer = customerRepository.findCustomerByEmail(email);

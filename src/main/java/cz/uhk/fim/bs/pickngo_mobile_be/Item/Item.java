@@ -3,7 +3,6 @@ package cz.uhk.fim.bs.pickngo_mobile_be.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteItem.BaguetteItem;
 import cz.uhk.fim.bs.pickngo_mobile_be.Ingredient.Ingredient;
-import cz.uhk.fim.bs.pickngo_mobile_be.BaguetteOrder.BaguetteOrder;
 import cz.uhk.fim.bs.pickngo_mobile_be.SpecialOffer.SpecialOffer;
 
 import javax.persistence.*;

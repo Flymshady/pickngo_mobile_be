@@ -1,6 +1,5 @@
 package cz.uhk.fim.bs.pickngo_mobile_be.IngredientType;
 
-import cz.uhk.fim.bs.pickngo_mobile_be.Ingredient.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +9,11 @@ import java.util.List;
 public class IngredientTypeService {
 
     private final IngredientTypeRepository ingredientTypeRepository;
-    private final IngredientRepository ingredientRepository;
 
     @Autowired
-    public IngredientTypeService(IngredientTypeRepository ingredientTypeRepository, IngredientRepository ingredientRepository) {
+    public IngredientTypeService(IngredientTypeRepository ingredientTypeRepository) {
         this.ingredientTypeRepository = ingredientTypeRepository;
-        this.ingredientRepository = ingredientRepository;
     }
-
 
     public List<IngredientType> getIngredientTypes() {
         return ingredientTypeRepository.findAll();
