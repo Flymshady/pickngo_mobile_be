@@ -109,12 +109,15 @@ public class BaguetteItemService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Objednávka nenelazena");
         }
+        double pricePrev = baguetteItemOpt.get().getPrice();
         Optional<List<Item>> items = itemRepository.findAllByBaguetteItem_Id(baguetteItemId);
         if(items.isPresent() && !items.get().isEmpty()) {
             for (Item item : items.get()) {
                 itemRepository.delete(item);
             }
         }
+        baguetteOrder.get().setPrice(baguetteOrder.get().getPrice()-pricePrev);
+        baguetteOrderRepository.save(baguetteOrder.get());
         baguetteItemRepository.delete(baguetteItemOpt.get());
 
         if(baguetteOrder1.get().getBaguetteItems()!=null){
@@ -197,7 +200,19 @@ public class BaguetteItemService {
         double price = specialOfferOptional.get().getPrice();
         BaguetteItem baguetteItem = new BaguetteItem();
         Optional<List<Item>> items = itemRepository.findAllBySpecialOffer_Id(specialOfferOptional.get().getId());
-        items.ifPresent(baguetteItem::setItems);
+        List<Item> itemsNew = new ArrayList<>();
+        if(items.isPresent()) {
+            for (Item item : items.get()) {
+                Item itemNew = new Item();
+                itemNew.setBaguetteItem(baguetteItem);
+                itemNew.setPrice(item.getPrice());
+                itemNew.setName(item.getName());
+                itemNew.setIngredient(item.getIngredient());
+                itemNew.setAmount(item.getAmount());
+                itemsNew.add(itemNew);
+            }
+        }
+        baguetteItem.setItems(itemsNew);
         baguetteItem.setPrice(price);
         baguetteItem.setOffer(true);
         baguetteItem.setBaguetteOrder(baguetteOrder.get());
@@ -205,6 +220,9 @@ public class BaguetteItemService {
         baguetteOrder.get().setPrice(baguetteOrder.get().getPrice()+price);
         baguetteItemRepository.save(baguetteItem);
         baguetteOrderRepository.save(baguetteOrder.get());
+        for(Item item2 : itemsNew){
+            itemRepository.save(item2);
+        }
         return baguetteItem;
     }
 }
